@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        // Prevents the age-gate flash on already-verified visits: the class
+        // is added BEFORE first paint, before anything is displayed.
+        if (localStorage.getItem('aura_age_verified') === 'true') {
+            document.documentElement.classList.add('age-verified');
+        }
+        // Same principle for the cookie banner: if a choice was already made,
+        // keep it hidden from the start instead of hiding it after the fact.
+        if (localStorage.getItem('aura_cookies_consent')) {
+            document.documentElement.classList.add('cookies-answered');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Cart — MAISON AURA</title>
+    <meta name="description" content="Your MAISON AURA cart.">
+    <meta name="robots" content="noindex">
+
+    <!-- Favicon -->
+    <link rel="icon" href="../images/favicon.ico" sizes="any">
+    <link rel="icon" href="../images/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="../images/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+
+    <!-- 100% local — no third-party CDN calls (GDPR) -->
+    <link rel="preload" href="../fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+
+<body>
+
+    <!-- ==================================================================
+     AGE GATE
+     ================================================================== -->
+    <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+        <div class="age-gate__panel">
+            <div class="age-gate__mark" aria-hidden="true">A</div>
+            <h2 class="age-gate__title" id="age-gate-title">Welcome to MAISON AURA</h2>
+            <p class="age-gate__lede">
+                This site presents alcoholic beverages. Please confirm your date of birth to continue.
+            </p>
+            <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+                <div class="age-gate__form">
+                    <label class="visually-hidden" for="age-day">Day</label>
+                    <input class="age-gate__field" type="number" id="age-day" placeholder="DD" min="1" max="31"
+                        inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-month">Month</label>
+                    <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12"
+                        inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-year">Year</label>
+                    <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="YYYY"
+                        min="1900" max="2100" inputmode="numeric" required>
+                </div>
+                <p class="age-gate__error" role="alert"></p>
+                <div class="age-gate__actions">
+                    <button type="submit" class="btn btn--fill">Enter the Site</button>
+                    <button type="button" class="age-gate__decline">I am not of legal age</button>
+                </div>
+            </form>
+            <p class="age-gate__legal">
+                Excessive alcohol consumption is dangerous for your health — please drink responsibly.
+                Under French law, the sale of alcohol to minors is prohibited.
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+     HEADER
+     ================================================================== -->
+<!-- ==================================================================
+     COOKIE BANNER
+     ================================================================== -->
+    <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+        <p class="cookie-banner__text">
+            This site uses no tracking or advertising cookies. Only essential technical data
+            (age verification, cart contents) is stored locally in your browser to ensure the
+            site functions properly.
+        </p>
+        <div class="cookie-banner__actions">
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Decline</button>
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accept</button>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Home">
+            <picture>
+                <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+            </picture>
+        </a>
+
+        <nav class="site-header__nav" id="site-nav" aria-label="Main navigation">
+            <a href="domaine.html">The Estate</a>
+            <a href="exception.html">Exception Cuvée</a>
+            <a href="cuvees.html">Our Wines</a>
+            <a href="boutique.html">Shop</a>
+            <a href="experiences.html">Experiences</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="site-header__actions">
+            <div class="site-header__lang">
+                <a href="../cart.html">FR</a>
+                <span aria-hidden="true">/</span>
+                <a href="cart.html" class="is-active" aria-current="true">EN</a>
+            </div>
+            <a href="cart.html" class="site-header__cart" aria-label="View cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                    stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+                    <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+                </svg>
+                <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+            </a>
+            <button class="site-header__burger" aria-label="Open menu" aria-expanded="false"
+                aria-controls="site-nav">
+                <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+            </button>
+        </div>
+    </header>
+
+    <main id="contenu">
+
+        <section class="section cart-page" id="panier">
+            <div class="wrap">
+                <div class="cart-page__header">
+                    <span class="eyebrow">Your Selection</span>
+                    <h1>Cart</h1>
+                </div>
+
+                <div class="cart-layout" id="cart-layout">
+
+                    <div class="cart-lines" id="cart-lines"><!-- generated by js/cart.js --></div>
+
+                    <aside class="cart-summary" id="cart-summary">
+                        <h2>Summary</h2>
+                        <div class="cart-summary__row">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal">0 €</span>
+                        </div>
+                        <div class="cart-summary__row">
+                            <span>Shipping</span>
+                            <span id="cart-shipping">—</span>
+                        </div>
+                        <div class="cart-summary__row cart-summary__row--total">
+                            <span>Total</span>
+                            <span id="cart-total">0 €</span>
+                        </div>
+                        <a href="checkout.html" class="btn btn--fill cart-summary__cta" id="cart-checkout-btn">Proceed
+                            to Checkout</a>
+                        <p class="cart-summary__note">Free shipping from €100 of purchases.</p>
+                    </aside>
+
+                </div>
+
+                <div class="cart-empty" id="cart-empty" hidden>
+                    <span class="eyebrow">Your Cart is Empty</span>
+                    <h2>Nothing to seal just yet.</h2>
+                    <p class="lede">Browse the shop to build your selection.</p>
+                    <a href="boutique.html" class="btn btn--fill">Visit the Shop</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================================================================
+     FOOTER
+     ================================================================== -->
+    <footer class="site-footer" id="contact">
+        <div class="wrap site-footer__grid">
+            <div>
+                <picture class="site-footer__brand">
+                    <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                    <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900"
+                        height="974">
+                </picture>
+                <p class="lede" style="margin-top:1rem; font-size:.85rem;">Wine Estate — Côtes de Provence.</p>
+            </div>
+            <div class="site-footer__col">
+                <h4>Maison</h4>
+                <a href="domaine.html">The Estate</a>
+                <a href="exception.html">Exception Cuvée</a>
+                <a href="cuvees.html">Our Wines</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Contact</h4>
+                <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+                <a href="experiences.html">Private Experiences</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Follow</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Pinterest</a>
+            </div>
+        </div>
+        <div class="wrap site-footer__legal">
+            <span>© <span id="footer-year"></span> MAISON AURA — Excessive alcohol consumption is dangerous for
+                your health, please drink responsibly.</span>
+            <span>Legal Notice · Terms &amp; Conditions · Privacy · Cookies</span>
+        </div>
+    </footer>
+
+    <!-- ==================================================================
+     SCRIPTS
+     ================================================================== -->
+    <script src="../gsap/gsap.min.js"></script>
+    <script src="../gsap/ScrollTrigger.min.js"></script>
+
+    <script src="../js/global.js"></script>
+    <script type="module" src="../js/cart.js"></script>
+
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

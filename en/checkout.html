@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (localStorage.getItem('aura_age_verified') === 'true') {
+            document.documentElement.classList.add('age-verified');
+        }
+        // Same principle for the cookie banner: if a choice was already made,
+        // keep it hidden from the start instead of hiding it after the fact.
+        if (localStorage.getItem('aura_cookies_consent')) {
+            document.documentElement.classList.add('cookies-answered');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Checkout — MAISON AURA</title>
+    <meta name="description" content="Complete your MAISON AURA order.">
+    <meta name="robots" content="noindex">
+
+    <link rel="icon" href="../images/favicon.ico" sizes="any">
+    <link rel="icon" href="../images/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="../images/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+
+    <link rel="preload" href="../fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/checkout.css">
+</head>
+
+<body>
+
+    <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+        <div class="age-gate__panel">
+            <div class="age-gate__mark" aria-hidden="true">A</div>
+            <h2 class="age-gate__title" id="age-gate-title">Welcome to MAISON AURA</h2>
+            <p class="age-gate__lede">
+                This site presents alcoholic beverages. Please confirm your date of birth to continue.
+            </p>
+            <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+                <div class="age-gate__form">
+                    <label class="visually-hidden" for="age-day">Day</label>
+                    <input class="age-gate__field" type="number" id="age-day" placeholder="DD" min="1" max="31" inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-month">Month</label>
+                    <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12" inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-year">Year</label>
+                    <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="YYYY" min="1900" max="2100" inputmode="numeric" required>
+                </div>
+                <p class="age-gate__error" role="alert"></p>
+                <div class="age-gate__actions">
+                    <button type="submit" class="btn btn--fill">Enter the Site</button>
+                    <button type="button" class="age-gate__decline">I am not of legal age</button>
+                </div>
+            </form>
+            <p class="age-gate__legal">
+                Excessive alcohol consumption is dangerous for your health — please drink responsibly.
+                Under French law, the sale of alcohol to minors is prohibited.
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+     COOKIE BANNER
+     ================================================================== -->
+    <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+        <p class="cookie-banner__text">
+            This site uses no tracking or advertising cookies. Only essential technical data
+            (age verification, cart contents) is stored locally in your browser to ensure the
+            site functions properly.
+        </p>
+        <div class="cookie-banner__actions">
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Decline</button>
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accept</button>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Home">
+            <picture>
+                <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+            </picture>
+        </a>
+
+        <nav class="site-header__nav" id="site-nav" aria-label="Main navigation">
+            <a href="domaine.html">The Estate</a>
+            <a href="exception.html">Exception Cuvée</a>
+            <a href="cuvees.html">Our Wines</a>
+            <a href="boutique.html">Shop</a>
+            <a href="experiences.html">Experiences</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="site-header__actions">
+            <div class="site-header__lang">
+                <a href="../checkout.html">FR</a>
+                <span aria-hidden="true">/</span>
+                <a href="checkout.html" class="is-active" aria-current="true">EN</a>
+            </div>
+            <a href="cart.html" class="site-header__cart" aria-label="View cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+                    <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+                </svg>
+                <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+            </a>
+            <button class="site-header__burger" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+            </button>
+        </div>
+    </header>
+
+    <main id="contenu">
+
+        <section class="section checkout-page" id="paiement">
+            <div class="wrap">
+                <div class="checkout-page__header">
+                    <span class="eyebrow">Last Step</span>
+                    <h1>Checkout</h1>
+                    <p class="checkout-demo-notice">
+                        Demonstration — no real transaction is processed, no banking data is transmitted or stored.
+                    </p>
+                </div>
+
+                <div class="checkout-layout" id="checkout-layout">
+
+                    <form class="checkout-form" id="checkout-form" novalidate>
+
+                        <h2 class="checkout-form__title">Delivery</h2>
+                        <div class="contact-field">
+                            <input type="text" id="ck-name" name="name" required placeholder=" ">
+                            <label for="ck-name">Full name</label>
+                            <span class="contact-field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="contact-field">
+                            <input type="email" id="ck-email" name="email" required placeholder=" ">
+                            <label for="ck-email">E-mail</label>
+                            <span class="contact-field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="contact-field">
+                            <input type="text" id="ck-address" name="address" required placeholder=" ">
+                            <label for="ck-address">Delivery address</label>
+                            <span class="contact-field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="checkout-form__row">
+                            <div class="contact-field">
+                                <input type="text" id="ck-city" name="city" required placeholder=" ">
+                                <label for="ck-city">City</label>
+                                <span class="contact-field__line" aria-hidden="true"></span>
+                            </div>
+                            <div class="contact-field">
+                                <input type="text" id="ck-zip" name="zip" required placeholder=" " inputmode="numeric">
+                                <label for="ck-zip">Postal code</label>
+                                <span class="contact-field__line" aria-hidden="true"></span>
+                            </div>
+                        </div>
+
+                        <h2 class="checkout-form__title checkout-form__title--card">
+                            Payment
+                            <span class="checkout-card-icons" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                                Card payment — simulation
+                            </span>
+                        </h2>
+
+                        <div class="contact-field">
+                            <input type="text" id="ck-card-number" name="card-number" required placeholder=" "
+                                inputmode="numeric" autocomplete="cc-number" maxlength="19">
+                            <label for="ck-card-number">Card number</label>
+                            <span class="contact-field__line" aria-hidden="true"></span>
+                        </div>
+                        <div class="checkout-form__row">
+                            <div class="contact-field">
+                                <input type="text" id="ck-card-expiry" name="card-expiry" required placeholder=" "
+                                    inputmode="numeric" maxlength="5" autocomplete="cc-exp">
+                                <label for="ck-card-expiry">MM / YY</label>
+                                <span class="contact-field__line" aria-hidden="true"></span>
+                            </div>
+                            <div class="contact-field">
+                                <input type="text" id="ck-card-cvc" name="card-cvc" required placeholder=" "
+                                    inputmode="numeric" maxlength="3" autocomplete="cc-csc">
+                                <label for="ck-card-cvc">CVC</label>
+                                <span class="contact-field__line" aria-hidden="true"></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn--fill checkout-form__submit" id="checkout-submit">
+                            <span class="checkout-form__submit-label">Pay <span id="checkout-submit-amount">0 €</span></span>
+                            <span class="checkout-form__spinner" aria-hidden="true"></span>
+                        </button>
+                        <p class="checkout-form__lock">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+                                <rect x="5" y="10" width="14" height="10" rx="1.5"></rect>
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                            </svg>
+                            Simulated secure payment
+                        </p>
+                    </form>
+
+                    <aside class="checkout-summary" id="checkout-summary">
+                        <h2>Your Order</h2>
+                        <div class="checkout-summary__lines" id="checkout-summary-lines"><!-- generated by js/checkout.js --></div>
+                        <div class="checkout-summary__row">
+                            <span>Subtotal</span>
+                            <span id="checkout-subtotal">0 €</span>
+                        </div>
+                        <div class="checkout-summary__row">
+                            <span>Shipping</span>
+                            <span id="checkout-shipping">—</span>
+                        </div>
+                        <div class="checkout-summary__row checkout-summary__row--total">
+                            <span>Total</span>
+                            <span id="checkout-total">0 €</span>
+                        </div>
+                    </aside>
+
+                </div>
+
+                <div class="checkout-empty" id="checkout-empty" hidden>
+                    <span class="eyebrow">Empty Cart</span>
+                    <h2>Nothing to settle just yet.</h2>
+                    <a href="boutique.html" class="btn btn--fill">Visit the Shop</a>
+                </div>
+
+                <div class="checkout-success" id="checkout-success" hidden>
+                    <div class="checkout-success__mark">
+                        <svg viewBox="0 0 60 60" aria-hidden="true">
+                            <circle cx="30" cy="30" r="27"></circle>
+                            <path class="checkout-success__check" d="M18 31l8 8 16-18"></path>
+                        </svg>
+                    </div>
+                    <span class="eyebrow">Order Confirmed</span>
+                    <h2>Thank you, <span id="checkout-success-name">your order</span> is on its way.</h2>
+                    <p class="lede" style="margin-inline:auto;">
+                        Order number <strong id="checkout-order-number"></strong> — a simulated confirmation has
+                        been prepared for your e-mail. (Demonstration: no e-mail is actually sent.)
+                    </p>
+                    <a href="index.html" class="btn btn--ghost">Back to Home</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer" id="contact">
+        <div class="wrap site-footer__grid">
+            <div>
+                <picture class="site-footer__brand">
+                    <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                    <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+                </picture>
+                <p class="lede" style="margin-top:1rem; font-size:.85rem;">Wine Estate — Côtes de Provence.</p>
+            </div>
+            <div class="site-footer__col">
+                <h4>Maison</h4>
+                <a href="domaine.html">The Estate</a>
+                <a href="exception.html">Exception Cuvée</a>
+                <a href="cuvees.html">Our Wines</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Contact</h4>
+                <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+                <a href="experiences.html">Private Experiences</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Follow</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Pinterest</a>
+            </div>
+        </div>
+        <div class="wrap site-footer__legal">
+            <span>© <span id="footer-year"></span> MAISON AURA — Excessive alcohol consumption is dangerous for your health, please drink responsibly.</span>
+            <span>Legal Notice · Terms &amp; Conditions · Privacy · Cookies</span>
+        </div>
+    </footer>
+
+    <script src="../gsap/gsap.min.js"></script>
+    <script src="../gsap/ScrollTrigger.min.js"></script>
+
+    <script src="../js/global.js"></script>
+    <script type="module" src="../js/checkout.js"></script>
+
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

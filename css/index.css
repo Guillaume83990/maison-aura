@@ -1,0 +1,482 @@
+/* ==========================================================================
+   MAISON AURA — index.css
+   Styles spécifiques à la page d'accueil
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — vérification d'âge / Loi Évin */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+  background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+
+.age-gate__panel{
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+}
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display);
+  color: var(--c-laiton);
+  font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{
+  margin: 0 auto 2.4rem;
+  font-size: .92rem;
+  color: var(--c-gris);
+}
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{
+  display: flex;
+  gap: .6rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.age-gate__field{
+  width: 4.2rem;
+  padding: .8em .4em;
+  text-align: center;
+  background: transparent;
+  border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft);
+  color: var(--c-blanc);
+  font-family: var(--f-body);
+  font-size: 1rem;
+  letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+
+.age-gate__error{
+  min-height: 1.4em;
+  font-size: .78rem;
+  color: #C97A6A;
+  margin-bottom: 1.2rem;
+}
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{
+  margin-top: 2.4rem;
+  font-size: .7rem;
+  line-height: 1.7;
+  color: var(--c-gris);
+  opacity: .75;
+}
+
+/* ==========================================================================
+   ÉTAPE 1 — INTRO CINÉMATIQUE (vidéo pilotée par le scroll, épinglée)
+   ========================================================================== */
+.cinematic{
+  position: relative;
+  /* Cette section porte TOUTE la distance de scroll de la séquence — voir
+     index.js (end: 'bottom bottom'). Trois temps s'y enchaînent : le
+     portail (canvas), le fondu vers l'image des vignes, puis le texte. */
+  height: 460vh;
+  width: 100%;
+  background: var(--c-noir);
+}
+.cinematic__stage{
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* C'est CE calque (pas la section entière) que ScrollTrigger épingle
+     (pin: stage, et non pin: true sur .cinematic). Épingler la section
+     entière — qui doit avoir une grande hauteur pour porter le scroll —
+     laissait un bloc de 100vh figé et vide juste après le décrochage. */
+}
+
+/* Image des vignes — calque de base, figée (aucune animation), révélée
+   quand le canvas se dissout dessus. */
+.hero__media{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--c-noir);
+}
+.hero__media picture,
+.hero__media img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Même raisonnement que pour le canvas : sur écran étroit et haut, la photo
+   (format paysage) se retrouve trop zoomée en "cover" — on la fait tenir
+   entière et centrée, façon cinéma. */
+@media (max-aspect-ratio: 0.85){
+  .hero__media picture,
+  .hero__media img{
+    object-fit: contain;
+  }
+}
+.hero__veil{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.55) 0%,
+      rgba(10,11,12,.05) 32%,
+      rgba(10,11,12,.15) 68%,
+      rgba(10,11,12,.75) 100%);
+  pointer-events: none;
+}
+.cinematic__canvas{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: var(--c-noir);
+}
+.cinematic__veil{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.62) 0%,
+      rgba(10,11,12,.1) 30%,
+      rgba(10,11,12,.1) 70%,
+      rgba(10,11,12,.7) 100%);
+  pointer-events: none;
+}
+.cinematic__overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: var(--gutter);
+  pointer-events: none;
+}
+.cinematic__logo{
+  display: block;
+  width: clamp(160px, 22vw, 280px);
+  height: auto;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,.35));
+}
+.cinematic__logo img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.hero__content{
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  max-width: 720px;
+  padding-inline: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+.hero__logo{
+  letter-spacing: .32em;
+}
+.hero__title{
+  color: var(--c-blanc);
+}
+.hero__text{
+  color: var(--c-sable);
+  opacity: .85;
+  max-width: 46ch;
+}
+.hero__cta{
+  margin-top: .6rem;
+}
+.hero__scrollcue{
+  position: absolute;
+  bottom: clamp(1.6rem, 5vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .7rem;
+  font-size: .68rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--c-gris);
+}
+.hero__scrollcue span{
+  width: 1px; height: 34px;
+  background: linear-gradient(to bottom, var(--c-laiton), transparent);
+  animation: cue-fall 2.2s ease-in-out infinite;
+}
+@keyframes cue-fall{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%{ transform: scaleY(1); transform-origin: top; opacity: 1; }
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+@media (max-width: 860px){
+  .hero__content{ gap: 1.1rem; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Showcase — Cuvée AURA TRÈS EXCEPTION (79€) — switch "plaque tournante" */
+/* ---------------------------------------------------------------------- */
+.showcase{
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--section-pad);
+  overflow: hidden;
+  background: var(--c-rouge-bg);
+  color: var(--c-rouge-txt);
+  transition: background-color 1s var(--ease-signature);
+}
+
+.showcase__bg-veil{
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255,255,255,.05), transparent 55%),
+    radial-gradient(ellipse at 80% 85%, rgba(0,0,0,.25), transparent 55%);
+  pointer-events: none;
+}
+
+.showcase__grid{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+.showcase__intro{ order: 1; }
+.showcase__intro .eyebrow{ margin-bottom: 1rem; color: currentColor; opacity: .65; }
+.showcase__intro h2{ margin-bottom: 1.4rem; }
+.showcase__intro p{ opacity: .78; max-width: 40ch; margin-bottom: 2.4rem; }
+
+/* Sélecteur de couleur — les 3 "repères" */
+.cuvee-switch{
+  display: flex;
+  gap: 1.1rem;
+  margin-bottom: 2.6rem;
+}
+.cuvee-switch__btn{
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .6rem 1.1rem .6rem .6rem;
+  border: 1px solid currentColor;
+  border-color: rgba(128,120,105,.35);
+  border-radius: 999px;
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .6;
+  transition: opacity var(--dur-med) var(--ease-signature),
+              border-color var(--dur-med) var(--ease-signature);
+}
+.cuvee-switch__btn:hover{ opacity: .85; }
+.cuvee-switch__btn[aria-pressed="true"]{
+  opacity: 1;
+  border-color: currentColor;
+}
+.cuvee-switch__dot{
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+}
+.cuvee-switch__btn[data-cuvee="rouge"] .cuvee-switch__dot{ background: #5B1B22; }
+.cuvee-switch__btn[data-cuvee="blanc"] .cuvee-switch__dot{ background: #E9DFB0; }
+.cuvee-switch__btn[data-cuvee="rose"]  .cuvee-switch__dot{ background: #E3B7A6; }
+
+/* Fiche de dégustation qui glisse verticalement au switch */
+.cuvee-note{ position: relative; min-height: 6.6rem; }
+.cuvee-note__item{
+  position: absolute; inset: 0;
+  opacity: 0;
+  visibility: hidden;
+}
+.cuvee-note__item.is-active{ position: relative; opacity: 1; visibility: visible; }
+.cuvee-note__name{ font-family: var(--f-display); font-size: 1.3rem; margin-bottom: .5rem; }
+.cuvee-note__pairing{ font-size: .86rem; opacity: .7; }
+.cuvee-note__price{
+  display: inline-block; margin-top: 1.2rem;
+  font-size: .78rem; letter-spacing: .1em;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Visuel — "livre" à défilement horizontal (flux normal, aucun position:
+   absolute pour les pages : la taille se calcule naturellement, sans le
+   moindre calcul de ratio fragile). Un cadre fixe (overflow:hidden) laisse
+   voir une page à la fois ; on fait glisser le rail en JS pour changer de
+   couleur, avec une légère bascule 3D façon page qui tourne. */
+.showcase__visual{
+  order: 2;
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: clamp(340px, 44vw, 600px);
+  max-height: 74vh;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 2px;
+  perspective: 1800px;
+  box-shadow: 0 40px 70px -30px rgba(0,0,0,.55);
+}
+
+.cuvee-book{
+  display: flex;
+  width: 300%;
+  height: 100%;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+.cuvee-page{
+  width: 33.3333%;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+.cuvee-page picture{ display: block; width: 100%; height: 100%; }
+.cuvee-page picture,
+.cuvee-page img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.cuvee-page::after{
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to right,
+    rgba(0,0,0,.3) 0%, transparent 14%,
+    transparent 86%, rgba(0,0,0,.3) 100%);
+  pointer-events: none;
+}
+
+.cuvee-book__gloss{
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg,
+    rgba(255,255,255,.08) 0%, transparent 22%,
+    transparent 78%, rgba(255,255,255,.05) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+.cuvee-book__edge{
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 3px;
+  background: linear-gradient(to right, rgba(0,0,0,.4), transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 900px){
+  .showcase__grid{ grid-template-columns: 1fr; }
+  .showcase__intro{ order: 1; text-align: center; }
+  .cuvee-switch{ justify-content: center; }
+  .showcase__visual{
+    order: 0;
+    max-width: 320px;
+    height: clamp(300px, 78vw, 460px);
+    max-height: 56vh;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Grille Plaisir / Gastronomie — accordéon sobre */
+/* ---------------------------------------------------------------------- */
+.gammes{ display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(197,160,89,.14); }
+.gamme{
+  background: var(--c-noir);
+  padding: clamp(2rem, 4vw, 3.4rem);
+}
+.gamme__eyebrow{ margin-bottom: .8rem; }
+.gamme__price{ font-family: var(--f-display); font-size: 1.1rem; color: var(--c-laiton); margin-bottom: 1.4rem; }
+
+.gamme__visual{
+  position: relative;
+  /* Largeur ET hauteur fixées explicitement, dans le même ratio 4:5, plutôt
+     que width:100% + aspect-ratio + max-height : ce dernier laissait la
+     largeur à 100% de la carte sans la contraindre quand max-height
+     réduisait la hauteur, redonnant une boîte large et un flacon coupé. */
+  width: clamp(192px, 25.6vw, 336px);
+  height: clamp(240px, 32vw, 420px);
+  max-width: 100%;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-bottom: 1.8rem;
+  background: var(--c-anthracite);
+}
+.gamme-book{
+  display: flex;
+  width: 300%;
+  height: 100%;
+}
+.gamme-page{
+  width: 33.3333%;
+  height: 100%;
+  flex-shrink: 0;
+}
+.gamme-page picture{ display: block; width: 100%; height: 100%; }
+.gamme-page picture,
+.gamme-page img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.gamme__colors{ display: flex; gap: .5rem; margin-top: 1.6rem; }
+.gamme__color-btn{
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .5em 1em; border: 1px solid rgba(197,160,89,.25); border-radius: 999px;
+  color: var(--c-gris);
+  transition: color .35s var(--ease-signature),
+              border-color .35s var(--ease-signature),
+              background-color .35s var(--ease-signature);
+}
+.gamme__color-btn:hover{ color: var(--c-blanc); border-color: rgba(197,160,89,.5); }
+.gamme__color-btn[aria-pressed="true"]{
+  color: var(--c-noir);
+  background: var(--c-laiton);
+  border-color: var(--c-laiton);
+}
+@media (max-width: 760px){ .gammes{ grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------------- */
+/* Expériences — bandeau réservation */
+/* ---------------------------------------------------------------------- */
+.experiences{
+  text-align: center;
+  background: var(--c-anthracite);
+}
+.experiences h2{ margin-bottom: 1.2rem; }
+.experiences p{ margin-inline: auto; margin-bottom: 2.4rem; }

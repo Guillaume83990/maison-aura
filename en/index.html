@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script>
+  // Prevents the age-gate flash on already-verified visits: the class is
+  // added BEFORE first paint, before anything is displayed.
+  if (localStorage.getItem('aura_age_verified') === 'true') {
+    document.documentElement.classList.add('age-verified');
+  }
+  // Same principle for the cookie banner: if a choice was already made,
+  // keep it hidden from the start instead of hiding it after the fact.
+  if (localStorage.getItem('aura_cookies_consent')) {
+    document.documentElement.classList.add('cookies-answered');
+  }
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAISON AURA — Wine Estate, Côtes de Provence</title>
+<meta name="description" content="MAISON AURA — a wine estate in Provence. Three intensities of light, Plaisir, Gastronomie and Exception, in Rosé, White and Red.">
+
+<!-- Favicon -->
+<link rel="icon" href="../images/favicon.ico" sizes="any">
+<link rel="icon" href="../images/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="icon" href="../images/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+
+<!-- 100% local — no third-party CDN calls (GDPR) -->
+<link rel="preload" href="../fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../images/sequence/frame-001.webp" as="image" type="image/webp">
+
+<link rel="stylesheet" href="../css/global.css">
+<link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+
+<!-- ==================================================================
+     AGE GATE — Real date-of-birth verification
+     ================================================================== -->
+<div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+  <div class="age-gate__panel">
+    <div class="age-gate__mark" aria-hidden="true">A</div>
+    <h2 class="age-gate__title" id="age-gate-title">Welcome to MAISON AURA</h2>
+    <p class="age-gate__lede">
+      This site presents alcoholic beverages. Please confirm your date of birth to continue.
+    </p>
+
+    <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+      <div class="age-gate__form">
+        <label class="visually-hidden" for="age-day">Day</label>
+        <input class="age-gate__field" type="number" id="age-day" placeholder="DD" min="1" max="31" inputmode="numeric" required>
+
+        <label class="visually-hidden" for="age-month">Month</label>
+        <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12" inputmode="numeric" required>
+
+        <label class="visually-hidden" for="age-year">Year</label>
+        <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="YYYY" min="1900" max="2100" inputmode="numeric" required>
+      </div>
+
+      <p class="age-gate__error" role="alert"></p>
+
+      <div class="age-gate__actions">
+        <button type="submit" class="btn btn--fill">Enter the Site</button>
+        <button type="button" class="age-gate__decline">I am not of legal age</button>
+      </div>
+    </form>
+
+    <p class="age-gate__legal">
+      Excessive alcohol consumption is dangerous for your health — please drink responsibly.
+      Under French law, the sale of alcohol to minors is prohibited.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================
+     HEADER
+     ================================================================== -->
+<!-- ==================================================================
+     COOKIE BANNER
+     ================================================================== -->
+<div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+  <p class="cookie-banner__text">
+    This site uses no tracking or advertising cookies. Only essential technical data
+    (age verification, cart contents) is stored locally in your browser to ensure the
+    site functions properly.
+  </p>
+  <div class="cookie-banner__actions">
+    <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Decline</button>
+    <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accept</button>
+  </div>
+</div>
+
+<header class="site-header">
+  <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Home">
+    <picture>
+      <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+      <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+    </picture>
+  </a>
+
+  <nav class="site-header__nav" id="site-nav" aria-label="Main navigation">
+    <a href="domaine.html">The Estate</a>
+    <a href="exception.html">Exception Cuvée</a>
+    <a href="cuvees.html">Our Wines</a>
+    <a href="boutique.html">Shop</a>
+    <a href="experiences.html">Experiences</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <div class="site-header__actions">
+    <div class="site-header__lang">
+      <a href="../index.html">FR</a>
+      <span aria-hidden="true">/</span>
+      <a href="index.html" class="is-active" aria-current="true">EN</a>
+    </div>
+    <a href="cart.html" class="site-header__cart" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+        <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+      </svg>
+      <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+    </a>
+    <button class="site-header__burger" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+      <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+    </button>
+  </div>
+</header>
+
+<main id="contenu">
+
+  <!-- ==================================================================
+       STEP 1 — CINEMATIC INTRO + HERO
+       One continuous, pinned sequence: the gate opens (scroll-driven
+       canvas), gently dissolves into the (still) vineyard image, then the
+       house text reveals as you scroll, before flowing into the rest of
+       the site.
+       ================================================================== -->
+  <section class="cinematic" id="cinematic">
+    <div class="cinematic__stage" id="cinematic-stage">
+      <div class="hero__media">
+        <picture>
+          <source type="image/avif" media="(max-width: 768px)" srcset="../images/hero-vignes-mobile.avif">
+          <source type="image/avif" media="(max-width: 1024px)" srcset="../images/hero-vignes-tablet.avif">
+          <source type="image/avif" media="(min-width: 1025px)" srcset="../images/hero-vignes-desktop.avif">
+          <source type="image/webp" media="(max-width: 768px)" srcset="../images/hero-vignes-mobile.webp">
+          <source type="image/webp" media="(max-width: 1024px)" srcset="../images/hero-vignes-tablet.webp">
+          <source type="image/webp" media="(min-width: 1025px)" srcset="../images/hero-vignes-desktop.webp">
+          <img id="hero-image" src="../images/hero-vignes-desktop.jpg"
+               alt="MAISON AURA vineyards at sunset, Provençal bastide surrounded by cypress trees, hills of Provence on the horizon"
+               loading="eager" fetchpriority="high">
+        </picture>
+      </div>
+
+      <div class="hero__veil" aria-hidden="true"></div>
+
+      <canvas class="cinematic__canvas" id="cinematic-canvas" aria-hidden="true"></canvas>
+
+      <div class="cinematic__veil" aria-hidden="true"></div>
+
+      <div class="cinematic__overlay" id="cinematic-overlay" aria-hidden="true">
+        <picture class="cinematic__logo">
+          <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+          <img src="../images/logo-maison-aura.png" alt="" width="900" height="974">
+        </picture>
+      </div>
+
+      <div class="hero__content" id="hero-content">
+        <span class="eyebrow hero__logo">MAISON AURA</span>
+        <h1 class="hero__title">Light is never rushed.</h1>
+        <p class="lede hero__text">
+          Côtes de Provence — Protected Designation of Origin. Three intensities of light,
+          one same demand for restraint.
+        </p>
+        <a href="#exception" class="btn btn--fill hero__cta">Discover the Maison</a>
+      </div>
+
+      <div class="hero__scrollcue" id="cinematic-scrollcue" aria-hidden="true">
+        <span></span>
+        Scroll
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       SHOWCASE — AURA TRÈS EXCEPTION CUVÉE (€79)
+       Red / White / Rosé staged switch
+       ================================================================== -->
+  <section class="showcase" id="exception" data-active-cuvee="rouge">
+    <div class="showcase__bg-veil" aria-hidden="true"></div>
+
+    <div class="showcase__grid">
+      <div class="showcase__intro">
+        <span class="eyebrow">The Grand Exception Cuvée</span>
+        <h2>AURA TRÈS</h2>
+        <p>
+          The house's rarest piece. A confidential production, reserved for tables and collections
+          that know how to wait.
+        </p>
+
+        <div class="cuvee-switch" role="group" aria-label="Choose the Très Exception Cuvée colour">
+          <button class="cuvee-switch__btn" data-cuvee="rouge" aria-pressed="true">
+            <span class="cuvee-switch__dot" aria-hidden="true"></span> Red
+          </button>
+          <button class="cuvee-switch__btn" data-cuvee="blanc" aria-pressed="false">
+            <span class="cuvee-switch__dot" aria-hidden="true"></span> White
+          </button>
+          <button class="cuvee-switch__btn" data-cuvee="rose" aria-pressed="false">
+            <span class="cuvee-switch__dot" aria-hidden="true"></span> Rosé
+          </button>
+        </div>
+
+        <div class="cuvee-note">
+          <div class="cuvee-note__item is-active" data-cuvee="rouge">
+            <p class="cuvee-note__name">AURA TRÈS — Red</p>
+            <p class="cuvee-note__pairing">Game, braised meats, aged cheeses.</p>
+            <span class="cuvee-note__price">€79 — 75cl</span>
+          </div>
+          <div class="cuvee-note__item" data-cuvee="blanc">
+            <p class="cuvee-note__name">AURA TRÈS — White</p>
+            <p class="cuvee-note__pairing">Shellfish, fine fish, iodine-forward cuisine.</p>
+            <span class="cuvee-note__price">€79 — 75cl</span>
+          </div>
+          <div class="cuvee-note__item" data-cuvee="rose">
+            <p class="cuvee-note__name">AURA TRÈS — Rosé</p>
+            <p class="cuvee-note__pairing">Grilled sea bass, Mediterranean cuisine, a distinguished apéritif.</p>
+            <span class="cuvee-note__price">€79 — 75cl</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn--fill">Request an Allocation</a>
+      </div>
+
+      <div class="showcase__visual">
+        <div class="cuvee-book" id="cuvee-book" role="group" aria-label="Très Exception Cuvée visual, selected colour">
+          <div class="cuvee-page" data-cuvee="rouge">
+            <picture>
+              <source media="(max-width: 768px)" srcset="../images/aura-tres-rouge-mobile.webp" type="image/webp">
+              <source media="(max-width: 1024px)" srcset="../images/aura-tres-rouge-tablet.webp" type="image/webp">
+              <source media="(min-width: 1025px)" srcset="../images/aura-tres-rouge-desktop.webp" type="image/webp">
+              <img src="../images/aura-tres-rouge-desktop.jpg"
+                   alt="AURA TRÈS EXCEPTION red bottle 2024, ribbed glass and burgundy capsule, resting on veined black marble in raking golden light"
+                   loading="lazy">
+            </picture>
+          </div>
+
+          <div class="cuvee-page" data-cuvee="blanc">
+            <picture>
+              <source media="(max-width: 768px)" srcset="../images/aura-tres-blanc-mobile.webp" type="image/webp">
+              <source media="(max-width: 1024px)" srcset="../images/aura-tres-blanc-tablet.webp" type="image/webp">
+              <source media="(min-width: 1025px)" srcset="../images/aura-tres-blanc-desktop.webp" type="image/webp">
+              <img src="../images/aura-tres-blanc-desktop.jpg"
+                   alt="AURA TRÈS EXCEPTION white bottle 2024, ribbed glass and brass capsule, on a limestone plinth draped in beige linen"
+                   loading="lazy">
+            </picture>
+          </div>
+
+          <div class="cuvee-page" data-cuvee="rose">
+            <picture>
+              <source media="(max-width: 768px)" srcset="../images/aura-tres-rose-mobile.webp" type="image/webp">
+              <source media="(max-width: 1024px)" srcset="../images/aura-tres-rose-tablet.webp" type="image/webp">
+              <source media="(min-width: 1025px)" srcset="../images/aura-tres-rose-desktop.webp" type="image/webp">
+              <img src="../images/aura-tres-rose-desktop.jpg"
+                   alt="AURA TRÈS EXCEPTION rosé bottle 2024, ribbed glass and copper capsule, in front of a brass ring and limestone plinth"
+                   loading="lazy">
+            </picture>
+          </div>
+        </div>
+        <div class="cuvee-book__gloss" aria-hidden="true"></div>
+        <div class="cuvee-book__edge" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       RANGES — Plaisir & Gastronomie (€19 / €29)
+       ================================================================== -->
+  <section class="section" id="gammes">
+    <div class="wrap" data-reveal>
+      <span class="eyebrow">The Estate's Wines</span>
+      <h2 style="margin-top:1rem; margin-bottom:3rem;">Two ranges, one same light.</h2>
+    </div>
+
+    <div class="gammes">
+      <article class="gamme">
+        <div class="gamme__visual">
+          <div class="gamme-book" data-gamme="plaisir" data-active-cuvee="rose">
+            <div class="gamme-page" data-cuvee="rose">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/brise-marine-rose-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/brise-marine-rose-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/brise-marine-rose-desktop.webp" type="image/webp">
+                <img src="../images/brise-marine-rose-desktop.jpg"
+                     alt="AURA Brise Marine rosé bottle 2024, ribbed glass and copper capsule, by the sea on the Côte de Provence"
+                     loading="lazy">
+              </picture>
+            </div>
+            <div class="gamme-page" data-cuvee="blanc">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/brise-marine-blanc-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/brise-marine-blanc-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/brise-marine-blanc-desktop.webp" type="image/webp">
+                <img src="../images/brise-marine-blanc-desktop.jpg"
+                     alt="AURA Brise Marine white bottle 2024, ribbed glass and gold capsule, on a sun-drenched Provençal table"
+                     loading="lazy">
+              </picture>
+            </div>
+            <div class="gamme-page" data-cuvee="rouge">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/brise-marine-rouge-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/brise-marine-rouge-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/brise-marine-rouge-desktop.webp" type="image/webp">
+                <img src="../images/brise-marine-rouge-desktop.jpg"
+                     alt="AURA Brise Marine red bottle 2024, ribbed glass and copper capsule, in front of the vineyard at sunset"
+                     loading="lazy">
+              </picture>
+            </div>
+          </div>
+        </div>
+
+        <span class="eyebrow gamme__eyebrow">Plaisir Cuvée</span>
+        <h3>Brise Marine</h3>
+        <p class="gamme__price">€19</p>
+        <p class="lede">The Gulf's immediate freshness, opened without ceremony.</p>
+        <div class="gamme__colors" role="group" aria-label="Choose a colour — Plaisir Cuvée">
+          <button type="button" class="gamme__color-btn" data-cuvee="rose" aria-pressed="true">Rosé</button>
+          <button type="button" class="gamme__color-btn" data-cuvee="blanc" aria-pressed="false">White</button>
+          <button type="button" class="gamme__color-btn" data-cuvee="rouge" aria-pressed="false">Red</button>
+        </div>
+      </article>
+
+      <article class="gamme">
+        <div class="gamme__visual">
+          <div class="gamme-book" data-gamme="gastronomie" data-active-cuvee="rose">
+            <div class="gamme-page" data-cuvee="rose">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/terroir-rose-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/terroir-rose-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/terroir-rose-desktop.webp" type="image/webp">
+                <img src="../images/terroir-rose-desktop.jpg"
+                     alt="AURA Terroir rosé bottle 2024, ribbed glass and copper capsule, on a Provençal terrace near a terracotta jar"
+                     loading="lazy">
+              </picture>
+            </div>
+            <div class="gamme-page" data-cuvee="blanc">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/terroir-blanc-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/terroir-blanc-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/terroir-blanc-desktop.webp" type="image/webp">
+                <img src="../images/terroir-blanc-desktop.jpg"
+                     alt="AURA Terroir white bottle 2024, ribbed glass and gold capsule, in front of terraced vines at sunset"
+                     loading="lazy">
+              </picture>
+            </div>
+            <div class="gamme-page" data-cuvee="rouge">
+              <picture>
+                <source media="(max-width: 768px)" srcset="../images/terroir-rouge-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="../images/terroir-rouge-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="../images/terroir-rouge-desktop.webp" type="image/webp">
+                <img src="../images/terroir-rouge-desktop.jpg"
+                     alt="AURA Terroir red bottle 2024, ribbed glass and copper capsule, in front of the bastide and lavender fields at sunset"
+                     loading="lazy">
+              </picture>
+            </div>
+          </div>
+        </div>
+
+        <span class="eyebrow gamme__eyebrow">Gastronomie Cuvée</span>
+        <h3>Terroir</h3>
+        <p class="gamme__price">€29</p>
+        <p class="lede">The precision of a pairing designed for the table.</p>
+        <div class="gamme__colors" role="group" aria-label="Choose a colour — Gastronomie Cuvée">
+          <button type="button" class="gamme__color-btn" data-cuvee="rose" aria-pressed="true">Rosé</button>
+          <button type="button" class="gamme__color-btn" data-cuvee="blanc" aria-pressed="false">White</button>
+          <button type="button" class="gamme__color-btn" data-cuvee="rouge" aria-pressed="false">Red</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       EXPERIENCES — teaser
+       ================================================================== -->
+  <section class="section experiences" id="experiences">
+    <div class="wrap" id="experiences-reveal">
+      <span class="eyebrow">Private Experiences</span>
+      <h2>Tastings by appointment.</h2>
+      <p class="lede" style="margin-inline:auto;">
+        Cellar tour, a vertical tasting of the Exception Cuvée, food and wine pairing with our
+        sommelier — by appointment only.
+      </p>
+      <a href="experiences.html" class="btn btn--ghost">Book an Experience</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================================================================
+     FOOTER
+     ================================================================== -->
+<footer class="site-footer" id="contact">
+  <div class="wrap site-footer__grid">
+    <div>
+      <picture class="site-footer__brand">
+        <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+        <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+      </picture>
+      <p class="lede" style="margin-top:1rem; font-size:.85rem;">Wine Estate — Côtes de Provence.</p>
+    </div>
+    <div class="site-footer__col">
+      <h4>Maison</h4>
+      <a href="domaine.html">The Estate</a>
+      <a href="exception.html">Exception Cuvée</a>
+      <a href="cuvees.html">Our Wines</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Contact</h4>
+      <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+      <a href="experiences.html">Private Experiences</a>
+    </div>
+    <div class="site-footer__col">
+      <h4>Follow</h4>
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+    </div>
+  </div>
+  <div class="wrap site-footer__legal">
+    <span>© <span id="footer-year"></span> MAISON AURA — Excessive alcohol consumption is dangerous for your health, please drink responsibly.</span>
+    <span>Legal Notice · Terms & Conditions · Privacy · Cookies</span>
+  </div>
+</footer>
+
+<!-- ==================================================================
+     SCRIPTS — 100% local (GDPR)
+     ================================================================== -->
+<script src="../gsap/gsap.min.js"></script>
+<script src="../gsap/ScrollTrigger.min.js"></script>
+
+<script src="../js/global.js"></script>
+<script type="module" src="../js/index.js"></script>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+</body>
+
+</html>

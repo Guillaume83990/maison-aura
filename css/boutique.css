@@ -1,0 +1,224 @@
+/* ==========================================================================
+   MAISON AURA — boutique.css
+   Styles spécifiques à la page "Boutique"
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — identique au reste du site */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter); background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+.age-gate__panel{ width: 100%; max-width: 460px; text-align: center; }
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); color: var(--c-laiton); font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{ margin: 0 auto 2.4rem; font-size: .92rem; color: var(--c-gris); }
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{ display: flex; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+.age-gate__field{
+  width: 4.2rem; padding: .8em .4em; text-align: center;
+  background: transparent; border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft); color: var(--c-blanc);
+  font-family: var(--f-body); font-size: 1rem; letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+.age-gate__error{ min-height: 1.4em; font-size: .78rem; color: #C97A6A; margin-bottom: 1.2rem; }
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{ margin-top: 2.4rem; font-size: .7rem; line-height: 1.7; color: var(--c-gris); opacity: .75; }
+
+/* ==========================================================================
+   HERO — même modèle que le reste du site (Ken Burns + parallax)
+   ========================================================================== */
+.boutique-hero{
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--c-noir);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.boutique-hero__media{ position: absolute; inset: 0; overflow: hidden; background: var(--c-noir); }
+.boutique-hero__media picture,
+.boutique-hero__media img{
+  width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform;
+}
+@media (max-aspect-ratio: 0.85){
+  .boutique-hero__media picture,
+  .boutique-hero__media img{ object-fit: contain; }
+}
+.boutique-hero__veil{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.6) 0%,
+      rgba(10,11,12,.2) 32%,
+      rgba(10,11,12,.3) 68%,
+      rgba(10,11,12,.85) 100%);
+  pointer-events: none;
+}
+.boutique-hero__content{
+  position: relative; z-index: 2; text-align: center; max-width: 640px;
+  padding-inline: var(--gutter);
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.boutique-hero__content h1{ color: var(--c-blanc); text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.boutique-hero__content .lede{ color: var(--c-sable); max-width: 44ch; text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.boutique-hero__scrollcue{
+  position: absolute;
+  bottom: clamp(1.6rem, 5vh, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--c-gris);
+}
+.boutique-hero__scrollcue span{
+  width: 1px; height: 34px;
+  background: linear-gradient(to bottom, var(--c-laiton), transparent);
+  animation: cue-fall 2.2s ease-in-out infinite;
+}
+@keyframes cue-fall{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%{ transform: scaleY(1); transform-origin: top; opacity: 1; }
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ==========================================================================
+   FILTRES — onglets avec indicateur coulissant
+   ========================================================================== */
+.boutique-filters{
+  position: relative;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: clamp(1.6rem, 4vw, 2.6rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: .9rem;
+  border-bottom: 1px solid rgba(197,160,89,.16);
+  width: 100%;
+}
+.boutique-filters__btn{
+  font-size: .76rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--c-gris);
+  padding-bottom: .3rem;
+  transition: color var(--dur-med) var(--ease-signature);
+}
+.boutique-filters__btn:hover{ color: var(--c-sable); }
+.boutique-filters__btn.is-active{ color: var(--c-laiton); }
+.boutique-filters__indicator{
+  position: absolute;
+  bottom: -1px; left: 0;
+  height: 1px;
+  background: var(--c-laiton);
+  width: 0;
+  transform: translateX(0);
+  transition: width .45s var(--ease-signature), transform .45s var(--ease-signature);
+}
+
+/* ==========================================================================
+   GRILLE PRODUITS
+   ========================================================================== */
+.boutique-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+}
+.boutique-card{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.boutique-card__media{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--c-anthracite);
+  margin-bottom: 1.2rem;
+}
+.boutique-card__media img{
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* Reflet qui balaie l'image au survol — signature de cette page */
+.boutique-card__shine{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg,
+    transparent 40%,
+    rgba(255,255,255,.22) 50%,
+    transparent 60%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.boutique-card__gamme{ font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--c-laiton); margin-bottom: .5rem; }
+.boutique-card__name{ font-family: var(--f-display); font-size: 1.15rem; margin-bottom: .3rem; }
+.boutique-card__color{ font-size: .82rem; color: var(--c-gris); margin-bottom: 1rem; }
+.boutique-card__footer{
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.boutique-card__price{ font-family: var(--f-display); font-size: 1.05rem; color: var(--c-blanc); }
+.boutique-card__add{
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .7em 1.2em;
+  border: 1px solid var(--c-laiton-soft);
+  border-radius: var(--radius-soft);
+  color: var(--c-sable);
+  transition: border-color var(--dur-med), background-color var(--dur-med), color var(--dur-med);
+}
+.boutique-card__add:hover{ background: var(--c-laiton); border-color: var(--c-laiton); color: var(--c-noir); }
+.boutique-card__add.is-added{ background: var(--c-laiton); border-color: var(--c-laiton); color: var(--c-noir); }
+
+@media (max-width: 960px){
+  .boutique-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px){
+  .boutique-grid{ grid-template-columns: 1fr; max-width: 380px; margin-inline: auto; }
+}
+
+/* ==========================================================================
+   EXCEPTION — rappel
+   ========================================================================== */
+.boutique-exception{ text-align: center; background: var(--c-anthracite); }
+.boutique-exception__inner h2{ margin-block: 1.2rem 1.4rem; }
+.boutique-exception__inner p{ margin-inline: auto; margin-bottom: 2.2rem; }
+
+/* ==========================================================================
+   ÉLÉMENT VOLANT — vole de la carte vers l'icône panier à l'ajout
+   ========================================================================== */
+.fly-to-cart{
+  position: fixed;
+  z-index: 500;
+  border-radius: 2px;
+  overflow: hidden;
+  pointer-events: none;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,.5);
+}
+.fly-to-cart img{ width: 100%; height: 100%; object-fit: cover; display: block; }

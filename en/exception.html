@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        if (localStorage.getItem('aura_age_verified') === 'true') {
+            document.documentElement.classList.add('age-verified');
+        }
+        // Same principle for the cookie banner: if a choice was already made,
+        // keep it hidden from the start instead of hiding it after the fact.
+        if (localStorage.getItem('aura_cookies_consent')) {
+            document.documentElement.classList.add('cookies-answered');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Exception Cuvée — AURA TRÈS, MAISON AURA</title>
+    <meta name="description"
+        content="AURA TRÈS — the Grand Exception Cuvée of MAISON AURA. Confidential production, in Rosé, White and Red, reserved for tables and collections that know how to wait.">
+
+    <link rel="icon" href="../images/favicon.ico" sizes="any">
+    <link rel="icon" href="../images/favicon-16x16.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="../images/favicon-32x32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png">
+
+    <link rel="preload" href="../fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../images/aura-tres-sans-fond-desktop.webp" as="image" type="image/webp">
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/exception.css">
+</head>
+
+<body>
+
+    <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+        <div class="age-gate__panel">
+            <div class="age-gate__mark" aria-hidden="true">A</div>
+            <h2 class="age-gate__title" id="age-gate-title">Welcome to MAISON AURA</h2>
+            <p class="age-gate__lede">
+                This site presents alcoholic beverages. Please confirm your date of birth to continue.
+            </p>
+            <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+                <div class="age-gate__form">
+                    <label class="visually-hidden" for="age-day">Day</label>
+                    <input class="age-gate__field" type="number" id="age-day" placeholder="DD" min="1" max="31" inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-month">Month</label>
+                    <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12" inputmode="numeric" required>
+                    <label class="visually-hidden" for="age-year">Year</label>
+                    <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="YYYY" min="1900" max="2100" inputmode="numeric" required>
+                </div>
+                <p class="age-gate__error" role="alert"></p>
+                <div class="age-gate__actions">
+                    <button type="submit" class="btn btn--fill">Enter the Site</button>
+                    <button type="button" class="age-gate__decline">I am not of legal age</button>
+                </div>
+            </form>
+            <p class="age-gate__legal">
+                Excessive alcohol consumption is dangerous for your health — please drink responsibly.
+                Under French law, the sale of alcohol to minors is prohibited.
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================================================================
+     COOKIE BANNER
+     ================================================================== -->
+    <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+        <p class="cookie-banner__text">
+            This site uses no tracking or advertising cookies. Only essential technical data
+            (age verification, cart contents) is stored locally in your browser to ensure the
+            site functions properly.
+        </p>
+        <div class="cookie-banner__actions">
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Decline</button>
+            <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accept</button>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Home">
+            <picture>
+                <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+            </picture>
+        </a>
+
+        <nav class="site-header__nav" id="site-nav" aria-label="Main navigation">
+            <a href="domaine.html">The Estate</a>
+            <a href="exception.html">Exception Cuvée</a>
+            <a href="cuvees.html">Our Wines</a>
+            <a href="boutique.html">Shop</a>
+            <a href="experiences.html">Experiences</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="site-header__actions">
+            <div class="site-header__lang">
+                <a href="../exception.html">FR</a>
+                <span aria-hidden="true">/</span>
+                <a href="exception.html" class="is-active" aria-current="true">EN</a>
+            </div>
+            <a href="cart.html" class="site-header__cart" aria-label="View cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+                    <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+                </svg>
+                <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+            </a>
+            <button class="site-header__burger" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
+                <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+            </button>
+        </div>
+    </header>
+
+    <main id="contenu">
+
+        <section class="exception-hero" id="exception-hero">
+            <div class="exception-hero__media">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="../images/aura-tres-sans-fond-mobile.webp" type="image/webp">
+                    <source media="(max-width: 1024px)" srcset="../images/aura-tres-sans-fond-tablet.webp" type="image/webp">
+                    <source media="(min-width: 1025px)" srcset="../images/aura-tres-sans-fond-desktop.webp" type="image/webp">
+                    <img id="exception-hero-image" src="../images/aura-tres-sans-fond-desktop.jpg"
+                        alt="AURA TRÈS EXCEPTION bottle on a black background, ribbed glass and gold capsule, engraved with the MAISON AURA sunburst"
+                        loading="eager" fetchpriority="high">
+                </picture>
+            </div>
+            <div class="exception-hero__veil" aria-hidden="true"></div>
+
+            <div class="exception-hero__content" id="exception-hero-content">
+                <span class="eyebrow">The Grand Exception Cuvée</span>
+                <h1>AURA TRÈS</h1>
+                <p class="lede">
+                    The house's rarest piece. A confidential production, reserved for tables
+                    and collections that know how to wait.
+                </p>
+            </div>
+
+            <div class="exception-hero__scrollcue" aria-hidden="true">
+                <span></span>
+                Scroll
+            </div>
+        </section>
+
+        <section class="section section--flush-top" id="rarete">
+            <div class="wrap exception-teaser">
+                <div class="exception-teaser__media">
+                    <picture>
+                        <source media="(max-width: 768px)" srcset="../images/aura-tres-rouge-mobile.webp" type="image/webp">
+                        <source media="(max-width: 1024px)" srcset="../images/aura-tres-rouge-tablet.webp" type="image/webp">
+                        <source media="(min-width: 1025px)" srcset="../images/aura-tres-rouge-desktop.webp" type="image/webp">
+                        <img src="../images/aura-tres-rouge-desktop.jpg"
+                            alt="AURA TRÈS EXCEPTION red bottle 2024, ribbed glass and burgundy capsule, resting on veined black marble in raking golden light"
+                            loading="lazy">
+                    </picture>
+                </div>
+                <div class="exception-teaser__content">
+                    <span class="eyebrow exception-teaser__eyebrow">A Confidential Production</span>
+                    <h2 class="exception-teaser__title">What we never rush.</h2>
+                    <p class="lede exception-teaser__text">
+                        A few hundred bottles a year, no more. AURA TRÈS is born of the estate's oldest plots,
+                        vinified separately, aged longer, blended only at the very end — once time, and time
+                        alone, has finished its work.
+                    </p>
+                    <p class="lede exception-teaser__text">
+                        Each plot is harvested at its own pace, often berry by berry on the most exposed rows.
+                        Nothing is blended until every vat has revealed what it had to say — sometimes over
+                        more than a full season.
+                    </p>
+                    <p class="lede exception-teaser__text">
+                        Three colours, one same demand: rush nothing.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section exception-elevage" id="elevage">
+            <div class="wrap" data-reveal>
+                <span class="eyebrow">The Ageing</span>
+                <h2 style="margin-top:1rem; margin-bottom:2.4rem;">Time, as the only ingredient.</h2>
+            </div>
+
+            <div class="wrap exception-elevage__grid">
+                <div class="exception-elevage__item">
+                    <span class="exception-elevage__num">01</span>
+                    <h3>Selection</h3>
+                    <p class="lede">
+                        Only the estate's oldest vines, with naturally low yields, are chosen for AURA TRÈS —
+                        a handful of rows, identified year after year.
+                    </p>
+                </div>
+                <div class="exception-elevage__item">
+                    <span class="exception-elevage__num">02</span>
+                    <h3>Ageing</h3>
+                    <p class="lede">
+                        From twelve to twenty-four months depending on the vintage, in barrels and foudres,
+                        in the estate's vaulted cellar — with no calendar set in advance.
+                    </p>
+                </div>
+                <div class="exception-elevage__item">
+                    <span class="exception-elevage__num">03</span>
+                    <h3>Blending</h3>
+                    <p class="lede">
+                        Decided by taste, never on paper. Some years, an entire vat is set aside rather than
+                        blended out of turn.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="exception-showcase" id="exception-showcase" data-active-cuvee="rouge">
+            <div class="exception-showcase__bg-veil" aria-hidden="true"></div>
+
+            <div class="exception-showcase__grid">
+                <div class="exception-showcase__intro">
+                    <span class="eyebrow">AURA TRÈS EXCEPTION</span>
+                    <h2>Choose your light.</h2>
+
+                    <div class="cuvee-switch" role="group" aria-label="Choose the Très Exception Cuvée colour">
+                        <button class="cuvee-switch__btn" data-cuvee="rouge" aria-pressed="true">
+                            <span class="cuvee-switch__dot" aria-hidden="true"></span> Red
+                        </button>
+                        <button class="cuvee-switch__btn" data-cuvee="blanc" aria-pressed="false">
+                            <span class="cuvee-switch__dot" aria-hidden="true"></span> White
+                        </button>
+                        <button class="cuvee-switch__btn" data-cuvee="rose" aria-pressed="false">
+                            <span class="cuvee-switch__dot" aria-hidden="true"></span> Rosé
+                        </button>
+                    </div>
+
+                    <div class="cuvee-note">
+                        <div class="cuvee-note__item is-active" data-cuvee="rouge">
+                            <p class="cuvee-note__name">AURA TRÈS — Red</p>
+                            <p class="cuvee-note__pairing">Game, braised meats, aged cheeses.</p>
+                            <span class="cuvee-note__price">€79 — 75cl</span>
+                        </div>
+                        <div class="cuvee-note__item" data-cuvee="blanc">
+                            <p class="cuvee-note__name">AURA TRÈS — White</p>
+                            <p class="cuvee-note__pairing">Shellfish, fine fish, iodine-forward cuisine.</p>
+                            <span class="cuvee-note__price">€79 — 75cl</span>
+                        </div>
+                        <div class="cuvee-note__item" data-cuvee="rose">
+                            <p class="cuvee-note__name">AURA TRÈS — Rosé</p>
+                            <p class="cuvee-note__pairing">Grilled sea bass, Mediterranean cuisine, a distinguished apéritif.</p>
+                            <span class="cuvee-note__price">€79 — 75cl</span>
+                        </div>
+                    </div>
+
+                    <a href="#allocation" class="btn btn--fill">Request an Allocation</a>
+                </div>
+
+                <div class="exception-showcase__visual">
+                    <div class="cuvee-book" id="cuvee-book" role="group" aria-label="Très Exception Cuvée visual, selected colour">
+                        <div class="cuvee-page" data-cuvee="rouge">
+                            <picture>
+                                <source media="(max-width: 768px)" srcset="../images/aura-tres-rouge-mobile.webp" type="image/webp">
+                                <source media="(max-width: 1024px)" srcset="../images/aura-tres-rouge-tablet.webp" type="image/webp">
+                                <source media="(min-width: 1025px)" srcset="../images/aura-tres-rouge-desktop.webp" type="image/webp">
+                                <img src="../images/aura-tres-rouge-desktop.jpg"
+                                    alt="AURA TRÈS EXCEPTION red bottle 2024, ribbed glass and burgundy capsule, resting on veined black marble in raking golden light"
+                                    loading="lazy">
+                            </picture>
+                        </div>
+                        <div class="cuvee-page" data-cuvee="blanc">
+                            <picture>
+                                <source media="(max-width: 768px)" srcset="../images/aura-tres-blanc-mobile.webp" type="image/webp">
+                                <source media="(max-width: 1024px)" srcset="../images/aura-tres-blanc-tablet.webp" type="image/webp">
+                                <source media="(min-width: 1025px)" srcset="../images/aura-tres-blanc-desktop.webp" type="image/webp">
+                                <img src="../images/aura-tres-blanc-desktop.jpg"
+                                    alt="AURA TRÈS EXCEPTION white bottle 2024, ribbed glass and brass capsule, on a limestone plinth draped in beige linen"
+                                    loading="lazy">
+                            </picture>
+                        </div>
+                        <div class="cuvee-page" data-cuvee="rose">
+                            <picture>
+                                <source media="(max-width: 768px)" srcset="../images/aura-tres-rose-mobile.webp" type="image/webp">
+                                <source media="(max-width: 1024px)" srcset="../images/aura-tres-rose-tablet.webp" type="image/webp">
+                                <source media="(min-width: 1025px)" srcset="../images/aura-tres-rose-desktop.webp" type="image/webp">
+                                <img src="../images/aura-tres-rose-desktop.jpg"
+                                    alt="AURA TRÈS EXCEPTION rosé bottle 2024, ribbed glass and copper capsule, in front of a brass ring and limestone plinth"
+                                    loading="lazy">
+                            </picture>
+                        </div>
+                    </div>
+                    <div class="cuvee-book__gloss" aria-hidden="true"></div>
+                    <div class="cuvee-book__edge" aria-hidden="true"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section exception-allocation" id="allocation">
+            <div class="wrap" id="allocation-reveal">
+                <span class="eyebrow">Confidential Access</span>
+                <h2>An allocation, not an order.</h2>
+                <p class="lede" style="margin-inline:auto;">
+                    Given the limited production, AURA TRÈS is not sold on the open market. Each request is
+                    reviewed, and an annual allocation is offered to houses and collectors who apply.
+                </p>
+                <p class="lede" style="margin-inline:auto; margin-top:-1.2rem; margin-bottom:2.4rem;">
+                    The process is simple: a request by e-mail, a conversation with the house to understand
+                    your intended use — a starred restaurant, a private cellar, a specific occasion — then an
+                    allocation proposal, based on the volumes available for the current vintage.
+                </p>
+                <a href="mailto:allocation@maisonaura.fr" class="btn btn--ghost">Make a Request</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer" id="contact">
+        <div class="wrap site-footer__grid">
+            <div>
+                <picture class="site-footer__brand">
+                    <source srcset="../images/logo-maison-aura.webp" type="image/webp">
+                    <img src="../images/logo-maison-aura.png" alt="MAISON AURA — Wines of Provence" width="900" height="974">
+                </picture>
+                <p class="lede" style="margin-top:1rem; font-size:.85rem;">Wine Estate — Côtes de Provence.</p>
+            </div>
+            <div class="site-footer__col">
+                <h4>Maison</h4>
+                <a href="domaine.html">The Estate</a>
+                <a href="exception.html">Exception Cuvée</a>
+                <a href="cuvees.html">Our Wines</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Contact</h4>
+                <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+                <a href="experiences.html">Private Experiences</a>
+            </div>
+            <div class="site-footer__col">
+                <h4>Follow</h4>
+                <a href="#">Instagram</a>
+                <a href="#">Pinterest</a>
+            </div>
+        </div>
+        <div class="wrap site-footer__legal">
+            <span>© <span id="footer-year"></span> MAISON AURA — Excessive alcohol consumption is dangerous for your health, please drink responsibly.</span>
+            <span>Legal Notice · Terms &amp; Conditions · Privacy · Cookies</span>
+        </div>
+    </footer>
+
+    <script src="../gsap/gsap.min.js"></script>
+    <script src="../gsap/ScrollTrigger.min.js"></script>
+
+    <script src="../js/global.js"></script>
+    <script type="module" src="../js/exception.js"></script>
+
+    <script>
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,221 @@
+/* ==========================================================================
+   MAISON AURA — contact.css
+   Styles spécifiques à la page "Contact"
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — identique au reste du site */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter); background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+.age-gate__panel{ width: 100%; max-width: 460px; text-align: center; }
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); color: var(--c-laiton); font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{ margin: 0 auto 2.4rem; font-size: .92rem; color: var(--c-gris); }
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{ display: flex; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+.age-gate__field{
+  width: 4.2rem; padding: .8em .4em; text-align: center;
+  background: transparent; border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft); color: var(--c-blanc);
+  font-family: var(--f-body); font-size: 1rem; letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+.age-gate__error{ min-height: 1.4em; font-size: .78rem; color: #C97A6A; margin-bottom: 1.2rem; }
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{ margin-top: 2.4rem; font-size: .7rem; line-height: 1.7; color: var(--c-gris); opacity: .75; }
+
+/* ==========================================================================
+   HERO — portail entrouvert + emblème sunburst dessiné au trait
+   ========================================================================== */
+.contact-hero{
+  position: relative; height: 100vh; width: 100%; overflow: hidden;
+  background: var(--c-noir); display: flex; align-items: center; justify-content: center;
+}
+.contact-hero__media{ position: absolute; inset: 0; overflow: hidden; background: var(--c-noir); }
+.contact-hero__media picture,
+.contact-hero__media img{
+  width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform;
+}
+@media (max-aspect-ratio: 0.85){
+  .contact-hero__media picture,
+  .contact-hero__media img{ object-fit: contain; }
+}
+.contact-hero__veil{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.62) 0%,
+      rgba(10,11,12,.25) 32%,
+      rgba(10,11,12,.35) 68%,
+      rgba(10,11,12,.85) 100%);
+  pointer-events: none;
+}
+.contact-hero__content{
+  position: relative; z-index: 2; text-align: center; max-width: 640px;
+  padding-inline: var(--gutter);
+  display: flex; flex-direction: column; align-items: center; gap: .9rem;
+}
+.contact-hero__emblem{
+  width: 64px; height: 64px;
+  margin-bottom: .6rem;
+  overflow: visible;
+}
+.contact-hero__emblem .emblem-ring,
+.contact-hero__emblem .emblem-ray{
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+}
+.contact-hero__content h1{ color: var(--c-blanc); text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.contact-hero__content .lede{ color: var(--c-sable); max-width: 44ch; text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.contact-hero__scrollcue{
+  position: absolute; bottom: clamp(1.6rem, 5vh, 3rem); left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--c-gris);
+}
+.contact-hero__scrollcue span{
+  width: 1px; height: 34px;
+  background: linear-gradient(to bottom, var(--c-laiton), transparent);
+  animation: cue-fall 2.2s ease-in-out infinite;
+}
+@keyframes cue-fall{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%{ transform: scaleY(1); transform-origin: top; opacity: 1; }
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ==========================================================================
+   SPLIT — coordonnées + formulaire
+   ========================================================================== */
+.contact-split__grid{
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+.contact-info h2{ margin-block: 1rem 1.4rem; }
+.contact-info .lede{ margin-bottom: 2.6rem; }
+.contact-info__list{ display: flex; flex-direction: column; gap: 1.6rem; }
+.contact-info__list li{ border-top: 1px solid rgba(197,160,89,.16); padding-top: 1.2rem; }
+.contact-info__label{
+  display: block; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--c-laiton); margin-bottom: .4rem;
+}
+.contact-info__value{ font-size: .96rem; color: var(--c-sable); }
+.contact-info__value--link{ transition: color var(--dur-med); }
+.contact-info__value--link:hover{ color: var(--c-laiton); }
+
+/* ---- Formulaire ---- */
+.contact-form-wrap{ position: relative; }
+.contact-form{ display: flex; flex-direction: column; gap: 2rem; }
+
+.contact-field{ position: relative; }
+.contact-field input,
+.contact-field select,
+.contact-field textarea{
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(197,160,89,.25);
+  padding: .7rem 0;
+  font-family: var(--f-body);
+  font-size: 1rem;
+  color: var(--c-blanc);
+  appearance: none;
+  border-radius: 0;
+}
+.contact-field select{ cursor: pointer; }
+.contact-field select option{ background: var(--c-anthracite); color: var(--c-blanc); }
+.contact-field textarea{ resize: vertical; min-height: 4.5rem; }
+.contact-field input:focus,
+.contact-field select:focus,
+.contact-field textarea:focus{ outline: none; }
+
+.contact-field label{
+  position: absolute;
+  left: 0; top: .7rem;
+  font-size: 1rem;
+  color: var(--c-gris);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform .3s var(--ease-signature), color .3s var(--ease-signature), top .3s var(--ease-signature);
+}
+.contact-field input:focus + label,
+.contact-field input:not(:placeholder-shown) + label,
+.contact-field textarea:focus + label,
+.contact-field textarea:not(:placeholder-shown) + label,
+.contact-field select:focus + label.contact-field__label--select,
+.contact-field select.has-value + label.contact-field__label--select{
+  transform: translateY(-1.4rem) scale(.76);
+  color: var(--c-laiton);
+}
+.contact-field--textarea label{ top: .7rem; }
+
+.contact-field__line{
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 100%; height: 1px;
+  background: var(--c-laiton);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s var(--ease-signature);
+}
+.contact-field input:focus ~ .contact-field__line,
+.contact-field select:focus ~ .contact-field__line,
+.contact-field textarea:focus ~ .contact-field__line{
+  transform: scaleX(1);
+}
+
+.contact-form__submit{ align-self: flex-start; margin-top: .6rem; }
+.contact-form__note{
+  font-size: .74rem; color: var(--c-gris); opacity: .8; margin-top: -.6rem;
+}
+
+/* ---- Écran de confirmation : sceau de cire ---- */
+.contact-seal{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: .6rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.contact-seal.is-visible{ opacity: 1; visibility: visible; pointer-events: auto; }
+.contact-seal__stamp{
+  width: 96px; height: 96px;
+  margin-bottom: 1.2rem;
+  transform: scale(0) rotate(-25deg);
+}
+.contact-seal__stamp svg{ width: 100%; height: 100%; }
+.contact-seal__stamp circle:first-child{ fill: var(--c-laiton); }
+.contact-seal__text{ font-family: var(--f-display); font-size: 1.4rem; color: var(--c-blanc); }
+.contact-seal__subtext{ font-size: .88rem; color: var(--c-gris); }
+
+@media (max-width: 900px){
+  .contact-split__grid{ grid-template-columns: 1fr; }
+  .contact-form__submit{ align-self: center; }
+}

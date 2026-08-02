@@ -1,0 +1,146 @@
+/* ==========================================================================
+   MAISON AURA — cart.css
+   Styles spécifiques à la page "Panier"
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — identique au reste du site */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter); background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+.age-gate__panel{ width: 100%; max-width: 460px; text-align: center; }
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); color: var(--c-laiton); font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{ margin: 0 auto 2.4rem; font-size: .92rem; color: var(--c-gris); }
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{ display: flex; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+.age-gate__field{
+  width: 4.2rem; padding: .8em .4em; text-align: center;
+  background: transparent; border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft); color: var(--c-blanc);
+  font-family: var(--f-body); font-size: 1rem; letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+.age-gate__error{ min-height: 1.4em; font-size: .78rem; color: #C97A6A; margin-bottom: 1.2rem; }
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{ margin-top: 2.4rem; font-size: .7rem; line-height: 1.7; color: var(--c-gris); opacity: .75; }
+
+/* ==========================================================================
+   PAGE PANIER
+   ========================================================================== */
+.cart-page{ padding-top: clamp(7rem, 12vw, 10rem); }
+.cart-page__header{ margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.cart-page__header h1{ margin-top: 1rem; }
+
+.cart-layout{
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  align-items: start;
+}
+
+/* ---- Lignes de panier ---- */
+.cart-lines{ display: flex; flex-direction: column; }
+.cart-line{
+  display: grid;
+  grid-template-columns: 84px 1fr auto auto;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.8rem);
+  padding-block: 1.6rem;
+  border-bottom: 1px solid rgba(197,160,89,.14);
+}
+.cart-line__media{
+  width: 84px; height: 105px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--c-anthracite);
+}
+.cart-line__media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.cart-line__gamme{ font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c-laiton); margin-bottom: .3rem; }
+.cart-line__name{ font-family: var(--f-display); font-size: 1.05rem; margin-bottom: .2rem; }
+.cart-line__color{ font-size: .82rem; color: var(--c-gris); }
+
+.cart-line__qty{
+  display: flex; align-items: center; gap: .7rem;
+  border: 1px solid rgba(197,160,89,.25);
+  border-radius: 999px;
+  padding: .3rem .5rem;
+}
+.cart-line__qty button{
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--c-sable);
+  transition: color var(--dur-med);
+}
+.cart-line__qty button:hover{ color: var(--c-laiton); }
+.cart-line__qty span{ min-width: 1.2rem; text-align: center; font-size: .9rem; }
+
+.cart-line__right{ text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; }
+.cart-line__price{ font-family: var(--f-display); font-size: 1rem; color: var(--c-blanc); }
+.cart-line__remove{
+  font-size: .7rem; letter-spacing: .06em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+  transition: color var(--dur-med);
+}
+.cart-line__remove:hover{ color: #C97A6A; }
+
+@media (max-width: 640px){
+  .cart-line{ grid-template-columns: 64px 1fr; grid-template-areas: "media name" "media qty" "media right"; row-gap: .6rem; }
+  .cart-line__media{ grid-area: media; width: 64px; height: 80px; }
+  .cart-line__info{ grid-area: name; }
+  .cart-line__qty{ grid-area: qty; justify-self: start; }
+  .cart-line__right{ grid-area: right; align-items: flex-start; text-align: left; }
+}
+
+/* ---- Résumé ---- */
+.cart-summary{
+  background: var(--c-anthracite);
+  border: 1px solid rgba(197,160,89,.14);
+  border-radius: 2px;
+  padding: clamp(1.8rem, 3vw, 2.4rem);
+  position: sticky;
+  top: 7rem;
+}
+.cart-summary h2{ font-size: 1.15rem; margin-bottom: 1.6rem; }
+.cart-summary__row{
+  display: flex; justify-content: space-between;
+  font-size: .9rem; color: var(--c-sable);
+  padding-block: .6rem;
+  border-top: 1px solid rgba(197,160,89,.1);
+}
+.cart-summary__row:first-of-type{ border-top: none; }
+.cart-summary__row--total{
+  font-family: var(--f-display); font-size: 1.15rem; color: var(--c-blanc);
+  border-top: 1px solid rgba(197,160,89,.25);
+  margin-top: .4rem; padding-top: 1rem;
+}
+.cart-summary__cta{ width: 100%; justify-content: center; margin-top: 1.6rem; }
+.cart-summary__note{ font-size: .74rem; color: var(--c-gris); margin-top: 1rem; text-align: center; }
+
+@media (max-width: 860px){
+  .cart-layout{ grid-template-columns: 1fr; }
+  .cart-summary{ position: static; }
+}
+
+/* ---- État vide ---- */
+.cart-empty{ text-align: center; max-width: 520px; margin-inline: auto; padding-block: 4rem; }
+.cart-empty h2{ margin-block: 1rem 1.2rem; }
+.cart-empty p{ margin-inline: auto; margin-bottom: 2.2rem; }

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <script>
+    // Empeche le flash de la modale d'age sur les visites deja verifiees :
+    // on ajoute la classe AVANT le premier rendu, donc avant tout affichage.
+    if (localStorage.getItem('aura_age_verified') === 'true') {
+      document.documentElement.classList.add('age-verified');
+    }
+    // Meme principe pour la banniere cookies : si un choix a deja ete fait,
+    // on la garde masquee des le depart plutot que de la cacher apres coup.
+    if (localStorage.getItem('aura_cookies_consent')) {
+      document.documentElement.classList.add('cookies-answered');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MAISON AURA — Domaine Viticole, Côtes de Provence</title>
+  <meta name="description"
+    content="MAISON AURA — domaine viticole de Provence. Trois intensités de lumière, Plaisir, Gastronomie et Exception, déclinées en Rosé, Blanc et Rouge.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="icon" href="images/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="images/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- 100% local — aucun appel à un CDN tiers (RGPD) -->
+  <link rel="preload" href="fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="images/sequence/frame-001.webp" as="image" type="image/webp">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+  <!-- ==================================================================
+     MODALE +18 — Vérification d'âge / Loi Évin
+     ================================================================== -->
+  <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+    <div class="age-gate__panel">
+      <div class="age-gate__mark" aria-hidden="true">A</div>
+      <h2 class="age-gate__title" id="age-gate-title">Bienvenue chez MAISON AURA</h2>
+      <p class="age-gate__lede">
+        Ce site présente des boissons alcoolisées. Merci de confirmer votre date de naissance pour poursuivre.
+      </p>
+
+      <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+        <div class="age-gate__form">
+          <label class="visually-hidden" for="age-day">Jour</label>
+          <input class="age-gate__field" type="number" id="age-day" placeholder="JJ" min="1" max="31"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-month">Mois</label>
+          <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-year">Année</label>
+          <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="AAAA" min="1900"
+            max="2100" inputmode="numeric" required>
+        </div>
+
+        <p class="age-gate__error" role="alert"></p>
+
+        <div class="age-gate__actions">
+          <button type="submit" class="btn btn--fill">J'entre sur le site</button>
+          <button type="button" class="age-gate__decline">Je n'ai pas l'âge légal</button>
+        </div>
+      </form>
+
+      <p class="age-gate__legal">
+        L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+        Conformément à la loi Évin, la vente d'alcool est interdite aux mineurs.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     BANNIÈRE COOKIES
+     ================================================================== -->
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+    <p class="cookie-banner__text">
+      Ce site n'utilise aucun cookie de suivi ni de publicité. Seules des données techniques
+      essentielles (vérification d'âge, contenu du panier) sont conservées localement dans votre
+      navigateur pour assurer son bon fonctionnement.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Refuser</button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accepter</button>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     HEADER
+     ================================================================== -->
+  <header class="site-header">
+    <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Accueil">
+      <picture>
+        <source srcset="images/logo-maison-aura.webp" type="image/webp">
+        <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+      </picture>
+    </a>
+
+    <nav class="site-header__nav" id="site-nav" aria-label="Navigation principale">
+      <a href="domaine.html">Le Domaine</a>
+      <a href="exception.html">Cuvée d'Exception</a>
+      <a href="cuvees.html">Les Cuvées</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="experiences.html">Expériences</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <div class="site-header__lang">
+        <a href="index.html" class="is-active" aria-current="true">FR</a>
+        <span aria-hidden="true">/</span>
+        <a href="en/index.html">EN</a>
+      </div>
+      <a href="cart.html" class="site-header__cart" aria-label="Voir le panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+          <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+        </svg>
+        <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+      </a>
+      <button class="site-header__burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-nav">
+        <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu">
+
+    <!-- ==================================================================
+       ÉTAPE 1 — INTRO CINÉMATIQUE + HERO
+       Une seule séquence continue, épinglée : le portail s'ouvre (canvas
+       piloté par le scroll), se dissout doucement sur l'image des vignes
+       (figée), puis le texte de la maison se dévoile au fil du scroll,
+       avant de laisser place normalement au reste du site.
+       ================================================================== -->
+    <section class="cinematic" id="cinematic">
+      <div class="cinematic__stage" id="cinematic-stage">
+        <div class="hero__media">
+          <picture>
+            <source type="image/avif" media="(max-width: 768px)" srcset="images/hero-vignes-mobile.avif">
+            <source type="image/avif" media="(max-width: 1024px)" srcset="images/hero-vignes-tablet.avif">
+            <source type="image/avif" media="(min-width: 1025px)" srcset="images/hero-vignes-desktop.avif">
+            <source type="image/webp" media="(max-width: 768px)" srcset="images/hero-vignes-mobile.webp">
+            <source type="image/webp" media="(max-width: 1024px)" srcset="images/hero-vignes-tablet.webp">
+            <source type="image/webp" media="(min-width: 1025px)" srcset="images/hero-vignes-desktop.webp">
+            <img id="hero-image" src="images/hero-vignes-desktop.jpg"
+              alt="Vignes du domaine MAISON AURA au coucher du soleil, bastide provençale entourée de cyprès, collines de Provence à l'horizon"
+              loading="eager" fetchpriority="high">
+          </picture>
+        </div>
+
+        <div class="hero__veil" aria-hidden="true"></div>
+
+        <canvas class="cinematic__canvas" id="cinematic-canvas" aria-hidden="true"></canvas>
+
+        <div class="cinematic__veil" aria-hidden="true"></div>
+
+        <div class="cinematic__overlay" id="cinematic-overlay" aria-hidden="true">
+          <picture class="cinematic__logo">
+            <source srcset="images/logo-maison-aura.webp" type="image/webp">
+            <img src="images/logo-maison-aura.png" alt="" width="900" height="974">
+          </picture>
+        </div>
+
+        <div class="hero__content" id="hero-content">
+          <span class="eyebrow hero__logo">MAISON AURA</span>
+          <h1 class="hero__title">La lumière ne se hâte jamais.</h1>
+          <p class="lede hero__text">
+            Côtes de Provence — Appellation d'Origine Protégée. Trois intensités de lumière,
+            une même exigence de sobriété.
+          </p>
+          <a href="#exception" class="btn btn--fill hero__cta">Découvrir la Maison</a>
+        </div>
+
+        <div class="hero__scrollcue" id="cinematic-scrollcue" aria-hidden="true">
+          <span></span>
+          Défiler
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       SHOWCASE — CUVÉE AURA TRÈS EXCEPTION (79€)
+       Switch scénographique Rouge / Blanc / Rosé
+       ================================================================== -->
+    <section class="showcase" id="exception" data-active-cuvee="rouge">
+      <div class="showcase__bg-veil" aria-hidden="true"></div>
+
+      <div class="showcase__grid">
+        <div class="showcase__intro">
+          <span class="eyebrow">Grande Cuvée d'Exception</span>
+          <h2>AURA TRÈS</h2>
+          <p>
+            La pièce rare de la maison. Production confidentielle, réservée aux tables et aux collections
+            qui savent attendre.
+          </p>
+
+          <div class="cuvee-switch" role="group" aria-label="Choisir la couleur de la Cuvée Très Exception">
+            <button class="cuvee-switch__btn" data-cuvee="rouge" aria-pressed="true">
+              <span class="cuvee-switch__dot" aria-hidden="true"></span> Rouge
+            </button>
+            <button class="cuvee-switch__btn" data-cuvee="blanc" aria-pressed="false">
+              <span class="cuvee-switch__dot" aria-hidden="true"></span> Blanc
+            </button>
+            <button class="cuvee-switch__btn" data-cuvee="rose" aria-pressed="false">
+              <span class="cuvee-switch__dot" aria-hidden="true"></span> Rosé
+            </button>
+          </div>
+
+          <div class="cuvee-note">
+            <div class="cuvee-note__item is-active" data-cuvee="rouge">
+              <p class="cuvee-note__name">AURA TRÈS — Rouge</p>
+              <p class="cuvee-note__pairing">Gibier, viandes braisées, fromages affinés.</p>
+              <span class="cuvee-note__price">79 € — 75cl</span>
+            </div>
+            <div class="cuvee-note__item" data-cuvee="blanc">
+              <p class="cuvee-note__name">AURA TRÈS — Blanc</p>
+              <p class="cuvee-note__pairing">Crustacés, poissons nobles, cuisine iodée.</p>
+              <span class="cuvee-note__price">79 € — 75cl</span>
+            </div>
+            <div class="cuvee-note__item" data-cuvee="rose">
+              <p class="cuvee-note__name">AURA TRÈS — Rosé</p>
+              <p class="cuvee-note__pairing">Loup grillé, cuisine méditerranéenne, apéritif d'exception.</p>
+              <span class="cuvee-note__price">79 € — 75cl</span>
+            </div>
+          </div>
+
+          <a href="#" class="btn btn--fill">Demander une allocation</a>
+        </div>
+
+        <div class="showcase__visual">
+          <div class="cuvee-book" id="cuvee-book" role="group"
+            aria-label="Visuel de la Cuvée Très Exception, couleur sélectionnée">
+            <div class="cuvee-page" data-cuvee="rouge">
+              <picture>
+                <source media="(max-width: 768px)" srcset="images/aura-tres-rouge-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="images/aura-tres-rouge-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="images/aura-tres-rouge-desktop.webp" type="image/webp">
+                <img src="images/aura-tres-rouge-desktop.jpg"
+                  alt="Flacon AURA TRÈS EXCEPTION rouge 2024, verrerie striée et capsule bordeaux, posé sur marbre noir veiné dans une lumière rasante dorée"
+                  loading="lazy">
+              </picture>
+            </div>
+
+            <div class="cuvee-page" data-cuvee="blanc">
+              <picture>
+                <source media="(max-width: 768px)" srcset="images/aura-tres-blanc-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="images/aura-tres-blanc-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="images/aura-tres-blanc-desktop.webp" type="image/webp">
+                <img src="images/aura-tres-blanc-desktop.jpg"
+                  alt="Flacon AURA TRÈS EXCEPTION blanc 2024, verrerie striée et capsule laiton, posé sur un socle de pierre calcaire drapé de lin beige"
+                  loading="lazy">
+              </picture>
+            </div>
+
+            <div class="cuvee-page" data-cuvee="rose">
+              <picture>
+                <source media="(max-width: 768px)" srcset="images/aura-tres-rose-mobile.webp" type="image/webp">
+                <source media="(max-width: 1024px)" srcset="images/aura-tres-rose-tablet.webp" type="image/webp">
+                <source media="(min-width: 1025px)" srcset="images/aura-tres-rose-desktop.webp" type="image/webp">
+                <img src="images/aura-tres-rose-desktop.jpg"
+                  alt="Flacon AURA TRÈS EXCEPTION rosé 2024, verrerie striée et capsule cuivrée, devant un anneau de laiton et un socle de pierre calcaire"
+                  loading="lazy">
+              </picture>
+            </div>
+          </div>
+          <div class="cuvee-book__gloss" aria-hidden="true"></div>
+          <div class="cuvee-book__edge" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       GAMMES — Plaisir & Gastronomie (19€ / 29€)
+       ================================================================== -->
+    <section class="section" id="gammes">
+      <div class="wrap" data-reveal>
+        <span class="eyebrow">Les Cuvées du Domaine</span>
+        <h2 style="margin-top:1rem; margin-bottom:3rem;">Deux gammes, une même lumière.</h2>
+      </div>
+
+      <div class="gammes">
+        <article class="gamme">
+          <div class="gamme__visual">
+            <div class="gamme-book" data-gamme="plaisir" data-active-cuvee="rose">
+              <div class="gamme-page" data-cuvee="rose">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-rose-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-rose-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-rose-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-rose-desktop.jpg"
+                    alt="Flacon AURA Brise Marine rosé 2024, verrerie striée et capsule cuivrée, en bord de mer sur la Côte de Provence"
+                    loading="lazy">
+                </picture>
+              </div>
+              <div class="gamme-page" data-cuvee="blanc">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-blanc-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-blanc-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-blanc-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-blanc-desktop.jpg"
+                    alt="Flacon AURA Brise Marine blanc 2024, verrerie striée et capsule dorée, sur une table provençale baignée de lumière"
+                    loading="lazy">
+                </picture>
+              </div>
+              <div class="gamme-page" data-cuvee="rouge">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-rouge-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-rouge-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-rouge-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-rouge-desktop.jpg"
+                    alt="Flacon AURA Brise Marine rouge 2024, verrerie striée et capsule cuivrée, devant les vignes au coucher du soleil"
+                    loading="lazy">
+                </picture>
+              </div>
+            </div>
+          </div>
+
+          <span class="eyebrow gamme__eyebrow">Cuvée Plaisir</span>
+          <h3>Brise Marine</h3>
+          <p class="gamme__price">19 €</p>
+          <p class="lede">La fraîcheur immédiate du Golfe, à ouvrir sans façon.</p>
+          <div class="gamme__colors" role="group" aria-label="Choisir la couleur — Cuvée Plaisir">
+            <button type="button" class="gamme__color-btn" data-cuvee="rose" aria-pressed="true">Rosé</button>
+            <button type="button" class="gamme__color-btn" data-cuvee="blanc" aria-pressed="false">Blanc</button>
+            <button type="button" class="gamme__color-btn" data-cuvee="rouge" aria-pressed="false">Rouge</button>
+          </div>
+        </article>
+
+        <article class="gamme">
+          <div class="gamme__visual">
+            <div class="gamme-book" data-gamme="gastronomie" data-active-cuvee="rose">
+              <div class="gamme-page" data-cuvee="rose">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-rose-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-rose-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-rose-desktop.webp" type="image/webp">
+                  <img src="images/terroir-rose-desktop.jpg"
+                    alt="Flacon AURA Terroir rosé 2024, verrerie striée et capsule cuivrée, sur une terrasse provençale près d'une jarre en terre cuite"
+                    loading="lazy">
+                </picture>
+              </div>
+              <div class="gamme-page" data-cuvee="blanc">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-blanc-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-blanc-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-blanc-desktop.webp" type="image/webp">
+                  <img src="images/terroir-blanc-desktop.jpg"
+                    alt="Flacon AURA Terroir blanc 2024, verrerie striée et capsule dorée, devant les vignes en terrasse au coucher du soleil"
+                    loading="lazy">
+                </picture>
+              </div>
+              <div class="gamme-page" data-cuvee="rouge">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-rouge-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-rouge-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-rouge-desktop.webp" type="image/webp">
+                  <img src="images/terroir-rouge-desktop.jpg"
+                    alt="Flacon AURA Terroir rouge 2024, verrerie striée et capsule cuivrée, devant la bastide et les champs de lavande au coucher du soleil"
+                    loading="lazy">
+                </picture>
+              </div>
+            </div>
+          </div>
+
+          <span class="eyebrow gamme__eyebrow">Cuvée Gastronomie</span>
+          <h3>Terroir</h3>
+          <p class="gamme__price">29 €</p>
+          <p class="lede">La précision d'un accord pensé pour la table.</p>
+          <div class="gamme__colors" role="group" aria-label="Choisir la couleur — Cuvée Gastronomie">
+            <button type="button" class="gamme__color-btn" data-cuvee="rose" aria-pressed="true">Rosé</button>
+            <button type="button" class="gamme__color-btn" data-cuvee="blanc" aria-pressed="false">Blanc</button>
+            <button type="button" class="gamme__color-btn" data-cuvee="rouge" aria-pressed="false">Rouge</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       EXPÉRIENCES — accroche
+       ================================================================== -->
+    <section class="section experiences" id="experiences">
+      <div class="wrap" id="experiences-reveal">
+        <span class="eyebrow">Expériences Privées</span>
+        <h2>Dégustations sur réservation.</h2>
+        <p class="lede" style="margin-inline:auto;">
+          Visite du chai, verticale de la Cuvée d'Exception, accord mets-vins avec notre sommelier — sur rendez-vous
+          uniquement.
+        </p>
+        <a href="experiences.html" class="btn btn--ghost">Réserver une expérience</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================================================================
+     FOOTER
+     ================================================================== -->
+  <footer class="site-footer" id="contact">
+    <div class="wrap site-footer__grid">
+      <div>
+        <picture class="site-footer__brand">
+          <source srcset="images/logo-maison-aura.webp" type="image/webp">
+          <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+        </picture>
+        <p class="lede" style="margin-top:1rem; font-size:.85rem;">Domaine Viticole — Côtes de Provence.</p>
+      </div>
+      <div class="site-footer__col">
+        <h4>Maison</h4>
+        <a href="domaine.html">Le Domaine</a>
+        <a href="exception.html">Cuvée d'Exception</a>
+        <a href="cuvees.html">Les Cuvées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Contact</h4>
+        <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+        <a href="experiences.html">Expériences privées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Suivre</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+      </div>
+    </div>
+    <div class="wrap site-footer__legal">
+      <span>© <span id="footer-year"></span> MAISON AURA — L'abus d'alcool est dangereux pour la santé, à consommer avec
+        modération.</span>
+      <span>Mentions légales · CGV · Confidentialité · Cookies</span>
+    </div>
+  </footer>
+
+  <!-- ==================================================================
+     SCRIPTS — 100% locaux (RGPD)
+     ================================================================== -->
+  <script src="gsap/gsap.min.js"></script>
+  <script src="gsap/ScrollTrigger.min.js"></script>
+
+  <script src="js/global.js"></script>
+  <script type="module" src="js/index.js"></script>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>

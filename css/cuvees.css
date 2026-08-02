@@ -1,0 +1,276 @@
+/* ==========================================================================
+   MAISON AURA — cuvees.css
+   Styles spécifiques à la page "Les Cuvées"
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — identique au reste du site */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter); background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+.age-gate__panel{ width: 100%; max-width: 460px; text-align: center; }
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); color: var(--c-laiton); font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{ margin: 0 auto 2.4rem; font-size: .92rem; color: var(--c-gris); }
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{ display: flex; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+.age-gate__field{
+  width: 4.2rem; padding: .8em .4em; text-align: center;
+  background: transparent; border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft); color: var(--c-blanc);
+  font-family: var(--f-body); font-size: 1rem; letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+.age-gate__error{ min-height: 1.4em; font-size: .78rem; color: #C97A6A; margin-bottom: 1.2rem; }
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{ margin-top: 2.4rem; font-size: .7rem; line-height: 1.7; color: var(--c-gris); opacity: .75; }
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.cuvees-hero{
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--c-noir);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cuvees-hero__media{ position: absolute; inset: 0; overflow: hidden; background: var(--c-noir); }
+.cuvees-hero__media picture,
+.cuvees-hero__media img{
+  width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform;
+}
+@media (max-aspect-ratio: 0.85){
+  .cuvees-hero__media picture,
+  .cuvees-hero__media img{ object-fit: contain; }
+}
+.cuvees-hero__veil{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.6) 0%,
+      rgba(10,11,12,.15) 32%,
+      rgba(10,11,12,.25) 68%,
+      rgba(10,11,12,.82) 100%);
+  pointer-events: none;
+}
+.cuvees-hero__content{
+  position: relative; z-index: 2; text-align: center; max-width: 680px;
+  padding-inline: var(--gutter);
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+}
+.cuvees-hero__content h1{ color: var(--c-blanc); text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.cuvees-hero__content .lede{ color: var(--c-sable); max-width: 48ch; text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.cuvees-hero__scrollcue{
+  position: absolute; bottom: clamp(1.6rem, 5vh, 3rem); left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--c-gris);
+}
+.cuvees-hero__scrollcue span{
+  width: 1px; height: 34px;
+  background: linear-gradient(to bottom, var(--c-laiton), transparent);
+  animation: cue-fall 2.2s ease-in-out infinite;
+}
+@keyframes cue-fall{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%{ transform: scaleY(1); transform-origin: top; opacity: 1; }
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ==========================================================================
+   ÉDITORIAL
+   ========================================================================== */
+.cuvees-intro{ max-width: 860px; margin-inline: auto; text-align: center; }
+.cuvees-intro h2{ margin-block: 1rem 1.6rem; }
+.cuvees-intro .lede{ margin-inline: auto; }
+
+/* ==========================================================================
+   GUIDE COMPARATIF
+   ========================================================================== */
+.cuvees-compare__grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+.cuvees-compare__card{
+  background: var(--c-anthracite);
+  border: 1px solid rgba(197,160,89,.14);
+  border-radius: 2px;
+  padding: clamp(1.6rem, 3vw, 2.2rem);
+}
+.cuvees-compare__card--exception{
+  border-color: rgba(197,160,89,.4);
+  background: linear-gradient(160deg, var(--c-anthracite), #1c1a16);
+}
+.cuvees-compare__card h3{ margin-top: .6rem; margin-bottom: 1.6rem; font-size: 1.3rem; }
+.cuvees-compare__list{ display: flex; flex-direction: column; gap: .9rem; }
+.cuvees-compare__list li{
+  font-size: .88rem; color: var(--c-sable); line-height: 1.5;
+}
+.cuvees-compare__list li span{
+  display: block; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--c-laiton); margin-bottom: .25rem;
+}
+.cuvees-compare__link{ margin-top: 1.8rem; width: 100%; justify-content: center; }
+@media (max-width: 860px){
+  .cuvees-compare__grid{ grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   SHOWCASE DÉTAILLÉ — Plaisir / Gastronomie
+   ========================================================================== */
+.cuvees-showcase{
+  position: relative;
+  padding-block: var(--section-pad);
+  overflow: hidden;
+  background: var(--c-noir);
+}
+.cuvees-showcase--reverse{ background: var(--c-anthracite); }
+.cuvees-showcase__bg-veil{
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(255,255,255,.04), transparent 55%),
+    radial-gradient(ellipse at 80% 85%, rgba(0,0,0,.2), transparent 55%);
+  pointer-events: none;
+}
+.cuvees-showcase__grid{
+  position: relative; z-index: 1;
+  width: 100%; max-width: 1440px; margin-inline: auto; padding-inline: var(--gutter);
+  display: grid; grid-template-columns: 1fr 1.15fr; align-items: center;
+  gap: clamp(2.5rem, 6vw, 6rem);
+}
+.cuvees-showcase--reverse .cuvees-showcase__grid{ grid-template-columns: 1.15fr 1fr; }
+.cuvees-showcase__intro h2{ margin: .8rem 0 1.2rem; }
+.cuvees-showcase__intro .lede{ margin-bottom: 2.2rem; max-width: 46ch; }
+
+.cuvee-switch{ display: flex; gap: 1rem; margin-bottom: 2.2rem; }
+.cuvee-switch__btn{
+  display: flex; align-items: center; gap: .6rem;
+  padding: .55rem 1rem .55rem .55rem;
+  border: 1px solid rgba(197,160,89,.3); border-radius: 999px;
+  font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--c-sable); opacity: .6;
+  transition: opacity var(--dur-med) var(--ease-signature), border-color var(--dur-med) var(--ease-signature);
+}
+.cuvee-switch__btn:hover{ opacity: .85; }
+.cuvee-switch__btn[aria-pressed="true"]{ opacity: 1; border-color: var(--c-laiton); }
+.cuvee-switch__dot{ width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+.cuvee-switch__btn[data-cuvee="rouge"] .cuvee-switch__dot{ background: #5B1B22; }
+.cuvee-switch__btn[data-cuvee="blanc"] .cuvee-switch__dot{ background: #E9DFB0; }
+.cuvee-switch__btn[data-cuvee="rose"] .cuvee-switch__dot{ background: #E3B7A6; }
+
+.cuvee-detail{ position: relative; min-height: 8.4rem; margin-bottom: 1.8rem; }
+.cuvee-detail__item{ position: absolute; inset: 0; opacity: 0; visibility: hidden; }
+.cuvee-detail__item.is-active{ position: relative; opacity: 1; visibility: visible; }
+.cuvee-detail__row{
+  display: grid; grid-template-columns: 5rem 1fr; gap: .8rem;
+  font-size: .84rem; color: var(--c-gris); line-height: 1.6; margin-bottom: .5rem;
+}
+.cuvee-detail__row span{
+  font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--c-laiton);
+}
+.cuvees-showcase__price{
+  font-family: var(--f-display); font-size: 1.2rem; color: var(--c-blanc);
+}
+
+.cuvees-showcase__visual-wrap{
+  position: relative;
+  width: clamp(240px, 26vw, 380px);
+  margin-inline: auto;
+}
+.cuvees-showcase__glow{
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  filter: blur(56px);
+  opacity: .5;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(227,183,166,.55) 0%, transparent 70%);
+  transition: opacity .5s var(--ease-signature);
+}
+.cuvees-showcase__visual{
+  position: relative;
+  width: 100%;
+  height: clamp(300px, 33vw, 475px);
+  overflow: hidden;
+  border-radius: 2px;
+  box-shadow: 0 40px 70px -30px rgba(0,0,0,.5);
+  perspective: 1600px;
+}
+.cuvee-book{ display: flex; width: 300%; height: 100%; will-change: transform; }
+.cuvee-page{ width: 33.3333%; height: 100%; flex-shrink: 0; position: relative; }
+.cuvee-page picture{ display: block; width: 100%; height: 100%; }
+.cuvee-page picture, .cuvee-page img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.cuvee-page::after{
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,.25) 0%, transparent 14%, transparent 86%, rgba(0,0,0,.25) 100%);
+  pointer-events: none;
+}
+
+/* Trait doré qui se dessine sous les grands titres à l'arrivée au scroll */
+.cuvees-underline{
+  display: block;
+  width: 64px;
+  height: 1px;
+  margin-top: .9rem;
+  background: var(--c-laiton);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.cuvees-intro .cuvees-underline{ margin-inline: auto; transform-origin: center; }
+
+@media (max-width: 900px){
+  .cuvees-showcase__grid,
+  .cuvees-showcase--reverse .cuvees-showcase__grid{ grid-template-columns: 1fr; text-align: center; }
+  .cuvees-showcase__visual-wrap{ order: -1; margin-bottom: 2rem; }
+  .cuvee-switch{ justify-content: center; }
+  .cuvee-detail__row{ grid-template-columns: 1fr; gap: .2rem; text-align: left; }
+  .cuvees-showcase__intro .lede{ margin-inline: auto; }
+}
+
+/* ==========================================================================
+   SERVICE — guide de dégustation
+   ========================================================================== */
+.cuvees-service__grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+.cuvees-service__num{
+  display: block; font-family: var(--f-display); font-size: 1rem;
+  color: var(--c-laiton); letter-spacing: .1em; margin-bottom: 1rem;
+}
+.cuvees-service__item h3{ margin-bottom: 1rem; }
+.cuvees-service__item .lede{ max-width: 38ch; }
+@media (max-width: 760px){
+  .cuvees-service__grid{ grid-template-columns: 1fr; gap: 2.4rem; }
+}
+
+/* ==========================================================================
+   CTA
+   ========================================================================== */
+.cuvees-cta{ text-align: center; background: var(--c-anthracite); }
+.cuvees-cta h2{ margin-block: 1.2rem 1.4rem; }
+.cuvees-cta p{ margin-inline: auto; margin-bottom: 2.4rem; }

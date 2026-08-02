@@ -1,0 +1,162 @@
+/* ==========================================================================
+   MAISON AURA — experiences.css
+   Styles spécifiques à la page "Expériences"
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* Modale +18 — identique au reste du site */
+/* ---------------------------------------------------------------------- */
+.age-gate{
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--gutter); background: var(--c-noir);
+}
+.age-gate[hidden]{ display: none; }
+.age-gate__panel{ width: 100%; max-width: 460px; text-align: center; }
+.age-gate__mark{
+  width: 46px; height: 46px; margin: 0 auto 2rem;
+  border: 1px solid var(--c-laiton-soft); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); color: var(--c-laiton); font-size: 1.1rem;
+}
+.age-gate__title{ margin-bottom: .8rem; }
+.age-gate__lede{ margin: 0 auto 2.4rem; font-size: .92rem; color: var(--c-gris); }
+.age-gate__form-wrap{ display: block; }
+.age-gate__form{ display: flex; gap: .6rem; justify-content: center; margin-bottom: 1rem; }
+.age-gate__field{
+  width: 4.2rem; padding: .8em .4em; text-align: center;
+  background: transparent; border: 1px solid rgba(197,160,89,.3);
+  border-radius: var(--radius-soft); color: var(--c-blanc);
+  font-family: var(--f-body); font-size: 1rem; letter-spacing: .05em;
+}
+.age-gate__field:focus{ border-color: var(--c-laiton); }
+.age-gate__field--year{ width: 6rem; }
+.age-gate__field::placeholder{ color: var(--c-gris); opacity: .6; }
+.age-gate__field::-webkit-outer-spin-button,
+.age-gate__field::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.age-gate__field[type="number"]{ -moz-appearance: textfield; }
+.age-gate__error{ min-height: 1.4em; font-size: .78rem; color: #C97A6A; margin-bottom: 1.2rem; }
+.age-gate__actions{ display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+.age-gate__decline{
+  font-size: .76rem; letter-spacing: .08em; color: var(--c-gris);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.age-gate__legal{ margin-top: 2.4rem; font-size: .7rem; line-height: 1.7; color: var(--c-gris); opacity: .75; }
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.experiences-hero{
+  position: relative; height: 100vh; width: 100%; overflow: hidden;
+  background: var(--c-noir); display: flex; align-items: center; justify-content: center;
+}
+.experiences-hero__media{ position: absolute; inset: 0; overflow: hidden; background: var(--c-noir); }
+.experiences-hero__media picture,
+.experiences-hero__media img{
+  width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform;
+}
+@media (max-aspect-ratio: 0.85){
+  .experiences-hero__media picture,
+  .experiences-hero__media img{ object-fit: contain; }
+}
+.experiences-hero__veil{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,11,12,.62) 0%,
+      rgba(10,11,12,.2) 32%,
+      rgba(10,11,12,.3) 68%,
+      rgba(10,11,12,.85) 100%);
+  pointer-events: none;
+}
+.experiences-hero__content{
+  position: relative; z-index: 2; text-align: center; max-width: 680px;
+  padding-inline: var(--gutter);
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+}
+.experiences-hero__content h1{ color: var(--c-blanc); text-shadow: 0 4px 24px rgba(0,0,0,.6); }
+.experiences-hero__content .lede{ color: var(--c-sable); max-width: 46ch; text-shadow: 0 2px 14px rgba(0,0,0,.65); }
+.experiences-hero__scrollcue{
+  position: absolute; bottom: clamp(1.6rem, 5vh, 3rem); left: 50%; transform: translateX(-50%);
+  z-index: 2; display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--c-gris);
+}
+.experiences-hero__scrollcue span{
+  width: 1px; height: 34px;
+  background: linear-gradient(to bottom, var(--c-laiton), transparent);
+  animation: cue-fall 2.2s ease-in-out infinite;
+}
+@keyframes cue-fall{
+  0%{ transform: scaleY(0); transform-origin: top; opacity: 0; }
+  40%{ transform: scaleY(1); transform-origin: top; opacity: 1; }
+  60%{ transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100%{ transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ==========================================================================
+   ÉDITORIAL
+   ========================================================================== */
+.experiences-intro{ max-width: 820px; margin-inline: auto; text-align: center; }
+.experiences-intro h2{ margin-block: 1rem 1.6rem; }
+.experiences-intro .lede{ margin-inline: auto; }
+
+/* ==========================================================================
+   CARTES EXPÉRIENCES — alternées, image + texte
+   ========================================================================== */
+.experiences-cards{ display: flex; flex-direction: column; gap: clamp(4rem, 8vw, 7rem); }
+.experiences-card{
+  display: grid;
+  grid-template-columns: .95fr 1.05fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.experiences-card--reverse{ direction: rtl; }
+.experiences-card--reverse > *{ direction: ltr; }
+.experiences-card__media picture,
+.experiences-card__media img{
+  width: 100%;
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.experiences-card__content .eyebrow{ margin-bottom: 1rem; }
+.experiences-card__content h3{ margin-bottom: 1.2rem; }
+.experiences-card__content .lede{ margin-bottom: 1.8rem; }
+.experiences-card__meta{
+  display: flex; flex-wrap: wrap; gap: .6rem;
+}
+.experiences-card__meta span{
+  font-size: .68rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: .5em 1em; border: 1px solid rgba(197,160,89,.25); border-radius: 999px;
+  color: var(--c-gris);
+}
+@media (max-width: 860px){
+  .experiences-card,
+  .experiences-card--reverse{ grid-template-columns: 1fr; direction: ltr; text-align: center; }
+  .experiences-card__meta{ justify-content: center; }
+}
+
+/* ==========================================================================
+   RÉSERVATION — 3 étapes
+   ========================================================================== */
+.experiences-booking__grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+.experiences-booking__num{
+  display: block; font-family: var(--f-display); font-size: 1rem;
+  color: var(--c-laiton); letter-spacing: .1em; margin-bottom: 1rem;
+}
+.experiences-booking__item h3{ margin-bottom: 1rem; }
+.experiences-booking__item .lede{ max-width: 38ch; }
+@media (max-width: 760px){
+  .experiences-booking__grid{ grid-template-columns: 1fr; gap: 2.4rem; }
+}
+
+/* ==========================================================================
+   CTA
+   ========================================================================== */
+.experiences-cta{ text-align: center; background: var(--c-anthracite); }
+.experiences-cta h2{ margin-block: 1.2rem 1.4rem; }
+.experiences-cta p{ margin-inline: auto; margin-bottom: 2.4rem; }

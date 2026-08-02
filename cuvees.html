@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <script>
+    // Empeche le flash de la modale d'age sur les visites deja verifiees :
+    // on ajoute la classe AVANT le premier rendu, donc avant tout affichage.
+    if (localStorage.getItem('aura_age_verified') === 'true') {
+      document.documentElement.classList.add('age-verified');
+    }
+    // Meme principe pour la banniere cookies : si un choix a deja ete fait,
+    // on la garde masquee des le depart plutot que de la cacher apres coup.
+    if (localStorage.getItem('aura_cookies_consent')) {
+      document.documentElement.classList.add('cookies-answered');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Les Cuvées — MAISON AURA, Côtes de Provence</title>
+  <meta name="description"
+    content="Les Cuvées MAISON AURA — Plaisir, Gastronomie et Exception, trois intensités de lumière déclinées en Rosé, Blanc et Rouge. Notes de dégustation, accords mets-vins, guide de service.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="icon" href="images/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="images/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- 100% local — aucun appel à un CDN tiers (RGPD) -->
+  <link rel="preload" href="fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="images/terroir-vignes-desktop.webp" as="image" type="image/webp">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/cuvees.css">
+</head>
+
+<body>
+
+  <!-- ==================================================================
+     MODALE +18 — Vérification d'âge / Loi Évin
+     ================================================================== -->
+  <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+    <div class="age-gate__panel">
+      <div class="age-gate__mark" aria-hidden="true">A</div>
+      <h2 class="age-gate__title" id="age-gate-title">Bienvenue chez MAISON AURA</h2>
+      <p class="age-gate__lede">
+        Ce site présente des boissons alcoolisées. Merci de confirmer votre date de naissance pour poursuivre.
+      </p>
+
+      <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+        <div class="age-gate__form">
+          <label class="visually-hidden" for="age-day">Jour</label>
+          <input class="age-gate__field" type="number" id="age-day" placeholder="JJ" min="1" max="31"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-month">Mois</label>
+          <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-year">Année</label>
+          <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="AAAA" min="1900"
+            max="2100" inputmode="numeric" required>
+        </div>
+
+        <p class="age-gate__error" role="alert"></p>
+
+        <div class="age-gate__actions">
+          <button type="submit" class="btn btn--fill">J'entre sur le site</button>
+          <button type="button" class="age-gate__decline">Je n'ai pas l'âge légal</button>
+        </div>
+      </form>
+
+      <p class="age-gate__legal">
+        L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+        Conformément à la loi Évin, la vente d'alcool est interdite aux mineurs.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     BANNIÈRE COOKIES
+     ================================================================== -->
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+    <p class="cookie-banner__text">
+      Ce site n'utilise aucun cookie de suivi ni de publicité. Seules des données techniques
+      essentielles (vérification d'âge, contenu du panier) sont conservées localement dans votre
+      navigateur pour assurer son bon fonctionnement.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Refuser</button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accepter</button>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     HEADER
+     ================================================================== -->
+  <header class="site-header">
+    <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Accueil">
+      <picture>
+        <source srcset="images/logo-maison-aura.webp" type="image/webp">
+        <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+      </picture>
+    </a>
+
+    <nav class="site-header__nav" id="site-nav" aria-label="Navigation principale">
+      <a href="domaine.html">Le Domaine</a>
+      <a href="exception.html">Cuvée d'Exception</a>
+      <a href="cuvees.html">Les Cuvées</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="experiences.html">Expériences</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <div class="site-header__lang">
+        <a href="cuvees.html" class="is-active" aria-current="true">FR</a>
+        <span aria-hidden="true">/</span>
+        <a href="en/cuvees.html">EN</a>
+      </div>
+      <a href="cart.html" class="site-header__cart" aria-label="Voir le panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+          <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+        </svg>
+        <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+      </a>
+      <button class="site-header__burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-nav">
+        <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu">
+
+    <!-- ==================================================================
+       HERO — vue d'ensemble des cuvées
+       ================================================================== -->
+    <section class="cuvees-hero" id="cuvees-hero">
+      <div class="cuvees-hero__media">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/terroir-vignes-mobile.webp" type="image/webp">
+          <source media="(max-width: 1024px)" srcset="images/terroir-vignes-tablet.webp" type="image/webp">
+          <source media="(min-width: 1025px)" srcset="images/terroir-vignes-desktop.webp" type="image/webp">
+          <img id="cuvees-hero-image" src="images/terroir-vignes-desktop.jpg"
+            alt="Rangs de vigne du domaine MAISON AURA surplombant la mer au coucher du soleil" loading="eager"
+            fetchpriority="high">
+        </picture>
+      </div>
+      <div class="cuvees-hero__veil" aria-hidden="true"></div>
+
+      <div class="cuvees-hero__content" id="cuvees-hero-content">
+        <span class="eyebrow">Le Domaine MAISON AURA</span>
+        <h1>Les Cuvées</h1>
+        <p class="lede">
+          Un seul terroir, trois intensités de lumière — Plaisir, Gastronomie, Exception —
+          chacune déclinée en Rosé, Blanc et Rouge.
+        </p>
+      </div>
+
+      <div class="cuvees-hero__scrollcue" aria-hidden="true">
+        <span></span>
+        Défiler
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       ÉDITORIAL — philosophie de la gamme
+       ================================================================== -->
+    <section class="section section--flush-top" id="philosophie">
+      <div class="wrap cuvees-intro" data-reveal>
+        <span class="eyebrow">Une Seule Exigence</span>
+        <h2>Trois vins, une même lumière.</h2>
+        <span class="cuvees-underline" aria-hidden="true"></span>
+        <p class="lede">
+          MAISON AURA ne produit pas trois gammes différentes — elle produit une seule idée du vin, déclinée à
+          trois intensités. La Cuvée Plaisir s'ouvre sans façon, la Cuvée Gastronomie se pense à table, la
+          Grande Cuvée d'Exception se mérite. Le terroir reste le même du premier au dernier flacon ; seule
+          change la patience qu'on lui accorde.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       GUIDE COMPARATIF — les 3 gammes en un coup d'œil
+       ================================================================== -->
+    <section class="section cuvees-compare" id="comparatif">
+      <div class="wrap" data-reveal>
+        <span class="eyebrow">Repères</span>
+        <h2 style="margin-top:1rem; margin-bottom:3rem;">Quelle cuvée, pour quel moment ?</h2>
+      </div>
+
+      <div class="wrap cuvees-compare__grid">
+        <article class="cuvees-compare__card">
+          <span class="eyebrow">Cuvée Plaisir</span>
+          <h3>Brise Marine — 19 €</h3>
+          <ul class="cuvees-compare__list">
+            <li><span>Occasion</span>Apéritif, terrasse, sans façon</li>
+            <li><span>Caractère</span>Immédiat, franc, désaltérant</li>
+            <li><span>À boire</span>Dans l'année, jeune</li>
+          </ul>
+        </article>
+        <article class="cuvees-compare__card">
+          <span class="eyebrow">Cuvée Gastronomie</span>
+          <h3>Terroir — 29 €</h3>
+          <ul class="cuvees-compare__list">
+            <li><span>Occasion</span>Repas, table, accord pensé</li>
+            <li><span>Caractère</span>Précis, structuré, gastronomique</li>
+            <li><span>À boire</span>2 à 4 ans de garde</li>
+          </ul>
+        </article>
+        <article class="cuvees-compare__card cuvees-compare__card--exception">
+          <span class="eyebrow">Grande Cuvée</span>
+          <h3>AURA TRÈS — 79 €</h3>
+          <ul class="cuvees-compare__list">
+            <li><span>Occasion</span>Collection, table d'exception</li>
+            <li><span>Caractère</span>Rare, dense, mémorable</li>
+            <li><span>À boire</span>5 à 10 ans de garde</li>
+          </ul>
+          <a href="exception.html" class="btn btn--ghost cuvees-compare__link">Découvrir la Cuvée d'Exception</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       CUVÉE PLAISIR — showcase détaillé
+       ================================================================== -->
+    <section class="cuvees-showcase" id="plaisir" data-active-cuvee="rose">
+      <div class="cuvees-showcase__bg-veil" aria-hidden="true"></div>
+      <div class="cuvees-showcase__grid">
+        <div class="cuvees-showcase__visual-wrap">
+          <div class="cuvees-showcase__glow" aria-hidden="true"></div>
+          <div class="cuvees-showcase__visual">
+            <div class="cuvee-book" id="plaisir-book" role="group"
+              aria-label="Visuel de la Cuvée Plaisir, couleur sélectionnée">
+              <div class="cuvee-page" data-cuvee="rose">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-rose-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-rose-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-rose-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-rose-desktop.jpg"
+                    alt="Flacon AURA Brise Marine rosé 2024 en bord de mer" loading="lazy">
+                </picture>
+              </div>
+              <div class="cuvee-page" data-cuvee="blanc">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-blanc-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-blanc-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-blanc-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-blanc-desktop.jpg"
+                    alt="Flacon AURA Brise Marine blanc 2024 sur une table provençale" loading="lazy">
+                </picture>
+              </div>
+              <div class="cuvee-page" data-cuvee="rouge">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/brise-marine-rouge-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/brise-marine-rouge-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/brise-marine-rouge-desktop.webp" type="image/webp">
+                  <img src="images/brise-marine-rouge-desktop.jpg"
+                    alt="Flacon AURA Brise Marine rouge 2024 devant les vignes" loading="lazy">
+                </picture>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cuvees-showcase__intro">
+          <span class="eyebrow">Cuvée Plaisir</span>
+          <h2>Brise Marine</h2>
+          <span class="cuvees-underline" aria-hidden="true"></span>
+          <p class="lede">
+            La fraîcheur immédiate du Golfe, à ouvrir sans façon. Pensée pour l'instant présent — un déjeuner
+            entre amis, une terrasse, une fin d'après-midi — Brise Marine ne demande ni attente ni cérémonie.
+          </p>
+
+          <div class="cuvee-switch" role="group" aria-label="Choisir la couleur — Cuvée Plaisir">
+            <button class="cuvee-switch__btn" data-cuvee="rose" aria-pressed="true"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Rosé</button>
+            <button class="cuvee-switch__btn" data-cuvee="blanc" aria-pressed="false"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Blanc</button>
+            <button class="cuvee-switch__btn" data-cuvee="rouge" aria-pressed="false"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Rouge</button>
+          </div>
+
+          <div class="cuvee-detail">
+            <div class="cuvee-detail__item is-active" data-cuvee="rose">
+              <p class="cuvee-detail__row"><span>Nez</span>Pêche blanche, agrumes, fleurs de garrigue.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Vive, saline, finale désaltérante.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Poissons grillés, salades d'été, apéritif.</p>
+              <p class="cuvee-detail__row"><span>Service</span>8-10°C</p>
+            </div>
+            <div class="cuvee-detail__item" data-cuvee="blanc">
+              <p class="cuvee-detail__row"><span>Nez</span>Citron vert, amande fraîche, iode.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Tendue, minérale, sans lourdeur.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Coquillages, fromages frais, cuisine légère.</p>
+              <p class="cuvee-detail__row"><span>Service</span>9-11°C</p>
+            </div>
+            <div class="cuvee-detail__item" data-cuvee="rouge">
+              <p class="cuvee-detail__row"><span>Nez</span>Fruits rouges croquants, poivre discret.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Souple, sans tanins durs, très buvable.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Grillades légères, charcuterie, planche d'été.</p>
+              <p class="cuvee-detail__row"><span>Service</span>13-15°C, légèrement rafraîchi</p>
+            </div>
+          </div>
+
+          <div class="cuvees-showcase__price">19 € — 75cl</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       CUVÉE GASTRONOMIE — showcase détaillé
+       ================================================================== -->
+    <section class="cuvees-showcase cuvees-showcase--reverse" id="gastronomie" data-active-cuvee="rose">
+      <div class="cuvees-showcase__bg-veil" aria-hidden="true"></div>
+      <div class="cuvees-showcase__grid">
+        <div class="cuvees-showcase__intro">
+          <span class="eyebrow">Cuvée Gastronomie</span>
+          <h2>Terroir</h2>
+          <span class="cuvees-underline" aria-hidden="true"></span>
+          <p class="lede">
+            La précision d'un accord pensé pour la table. Terroir s'adresse à ceux qui prennent le temps
+            d'un repas complet — plus de structure, plus de matière, une cuvée qui répond au plat plutôt
+            que de s'effacer devant lui.
+          </p>
+
+          <div class="cuvee-switch" role="group" aria-label="Choisir la couleur — Cuvée Gastronomie">
+            <button class="cuvee-switch__btn" data-cuvee="rose" aria-pressed="true"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Rosé</button>
+            <button class="cuvee-switch__btn" data-cuvee="blanc" aria-pressed="false"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Blanc</button>
+            <button class="cuvee-switch__btn" data-cuvee="rouge" aria-pressed="false"><span class="cuvee-switch__dot"
+                aria-hidden="true"></span> Rouge</button>
+          </div>
+
+          <div class="cuvee-detail">
+            <div class="cuvee-detail__item is-active" data-cuvee="rose">
+              <p class="cuvee-detail__row"><span>Nez</span>Groseille, pêche de vigne, notes épicées.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Ample, texturée, belle longueur.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Loup grillé, cuisine méditerranéenne relevée.</p>
+              <p class="cuvee-detail__row"><span>Service</span>10-12°C</p>
+            </div>
+            <div class="cuvee-detail__item" data-cuvee="blanc">
+              <p class="cuvee-detail__row"><span>Nez</span>Fleurs blanches, léger boisé, miel discret.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Riche, équilibrée, finale saline.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Crustacés, poissons nobles, cuisine iodée.</p>
+              <p class="cuvee-detail__row"><span>Service</span>11-13°C</p>
+            </div>
+            <div class="cuvee-detail__item" data-cuvee="rouge">
+              <p class="cuvee-detail__row"><span>Nez</span>Fruits noirs mûrs, garrigue, épices douces.</p>
+              <p class="cuvee-detail__row"><span>Bouche</span>Charpentée, tanins fondus, belle persistance.</p>
+              <p class="cuvee-detail__row"><span>Accord</span>Viandes rôties, fromages affinés.</p>
+              <p class="cuvee-detail__row"><span>Service</span>16-17°C</p>
+            </div>
+          </div>
+
+          <div class="cuvees-showcase__price">29 € — 75cl</div>
+        </div>
+
+        <div class="cuvees-showcase__visual-wrap">
+          <div class="cuvees-showcase__glow" aria-hidden="true"></div>
+          <div class="cuvees-showcase__visual">
+            <div class="cuvee-book" id="gastronomie-book" role="group"
+              aria-label="Visuel de la Cuvée Gastronomie, couleur sélectionnée">
+              <div class="cuvee-page" data-cuvee="rose">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-rose-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-rose-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-rose-desktop.webp" type="image/webp">
+                  <img src="images/terroir-rose-desktop.jpg"
+                    alt="Flacon AURA Terroir rosé 2024 sur une terrasse provençale" loading="lazy">
+                </picture>
+              </div>
+              <div class="cuvee-page" data-cuvee="blanc">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-blanc-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-blanc-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-blanc-desktop.webp" type="image/webp">
+                  <img src="images/terroir-blanc-desktop.jpg"
+                    alt="Flacon AURA Terroir blanc 2024 devant les vignes en terrasse" loading="lazy">
+                </picture>
+              </div>
+              <div class="cuvee-page" data-cuvee="rouge">
+                <picture>
+                  <source media="(max-width: 768px)" srcset="images/terroir-rouge-mobile.webp" type="image/webp">
+                  <source media="(max-width: 1024px)" srcset="images/terroir-rouge-tablet.webp" type="image/webp">
+                  <source media="(min-width: 1025px)" srcset="images/terroir-rouge-desktop.webp" type="image/webp">
+                  <img src="images/terroir-rouge-desktop.jpg"
+                    alt="Flacon AURA Terroir rouge 2024 devant la bastide au coucher du soleil" loading="lazy">
+                </picture>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       SERVICE — guide de dégustation
+       ================================================================== -->
+    <section class="section cuvees-service" id="service">
+      <div class="wrap" data-reveal>
+        <span class="eyebrow">Le Service</span>
+        <h2 style="margin-top:1rem; margin-bottom:1.6rem;">Comment déguster nos cuvées.</h2>
+        <p class="lede" style="margin-bottom:3rem;">
+          Un vin bien servi se raconte différemment. Quelques repères, sans dogme, pour en profiter pleinement.
+        </p>
+      </div>
+
+      <div class="wrap cuvees-service__grid">
+        <div class="cuvees-service__item">
+          <span class="cuvees-service__num">01</span>
+          <h3>La température</h3>
+          <p class="lede">
+            Trop froid, un vin se referme. Sortez la bouteille du réfrigérateur quinze minutes avant de servir
+            les rosés et blancs de Plaisir ; les cuvées de Gastronomie et d'Exception gagnent à être ouvertes
+            un peu plus tôt, à température de cave.
+          </p>
+        </div>
+        <div class="cuvees-service__item">
+          <span class="cuvees-service__num">02</span>
+          <h3>Le verre</h3>
+          <p class="lede">
+            Un verre tulipe, pas trop large, suffit à révéler l'essentiel. Pour les rouges de Gastronomie et
+            d'Exception, un verre à bordeaux laisse au vin la place de s'ouvrir.
+          </p>
+        </div>
+        <div class="cuvees-service__item">
+          <span class="cuvees-service__num">03</span>
+          <h3>La carafe</h3>
+          <p class="lede">
+            Inutile sur Brise Marine. Sur Terroir, trente minutes en carafe arrondissent les rouges jeunes.
+            Sur AURA TRÈS, l'aération se fait au verre, lentement — c'est une part du plaisir.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       CTA — vers la boutique
+       ================================================================== -->
+    <section class="section cuvees-cta" id="cuvees-cta">
+      <div class="wrap" id="cuvees-cta-reveal">
+        <span class="eyebrow">Prêt à Commander</span>
+        <h2>Recevoir nos cuvées chez vous.</h2>
+        <span class="cuvees-underline" aria-hidden="true"></span>
+        <p class="lede" style="margin-inline:auto;">
+          Plaisir et Gastronomie sont disponibles à la vente directe. Pour AURA TRÈS, une allocation
+          confidentielle est proposée sur demande.
+        </p>
+        <a href="boutique.html" class="btn btn--fill">Visiter la Boutique</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================================================================
+     FOOTER
+     ================================================================== -->
+  <footer class="site-footer" id="contact">
+    <div class="wrap site-footer__grid">
+      <div>
+        <picture class="site-footer__brand">
+          <source srcset="images/logo-maison-aura.webp" type="image/webp">
+          <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+        </picture>
+        <p class="lede" style="margin-top:1rem; font-size:.85rem;">Domaine Viticole — Côtes de Provence.</p>
+      </div>
+      <div class="site-footer__col">
+        <h4>Maison</h4>
+        <a href="domaine.html">Le Domaine</a>
+        <a href="exception.html">Cuvée d'Exception</a>
+        <a href="cuvees.html">Les Cuvées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Contact</h4>
+        <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+        <a href="experiences.html">Expériences privées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Suivre</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+      </div>
+    </div>
+    <div class="wrap site-footer__legal">
+      <span>© <span id="footer-year"></span> MAISON AURA — L'abus d'alcool est dangereux pour la santé, à consommer avec
+        modération.</span>
+      <span>Mentions légales · CGV · Confidentialité · Cookies</span>
+    </div>
+  </footer>
+
+  <!-- ==================================================================
+     SCRIPTS — 100% locaux (RGPD)
+     ================================================================== -->
+  <script src="gsap/gsap.min.js"></script>
+  <script src="gsap/ScrollTrigger.min.js"></script>
+
+  <script src="js/global.js"></script>
+  <script type="module" src="js/cuvees.js"></script>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>

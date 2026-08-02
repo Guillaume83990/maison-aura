@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <script>
+    // Empeche le flash de la modale d'age sur les visites deja verifiees :
+    // on ajoute la classe AVANT le premier rendu, donc avant tout affichage.
+    if (localStorage.getItem('aura_age_verified') === 'true') {
+      document.documentElement.classList.add('age-verified');
+    }
+    // Meme principe pour la banniere cookies : si un choix a deja ete fait,
+    // on la garde masquee des le depart plutot que de la cacher apres coup.
+    if (localStorage.getItem('aura_cookies_consent')) {
+      document.documentElement.classList.add('cookies-answered');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Le Domaine — MAISON AURA, Côtes de Provence</title>
+  <meta name="description"
+    content="Le Domaine MAISON AURA — un terroir niché entre mer et collines en Côtes de Provence, une bastide provençale, un savoir-faire discret transmis sans précipitation.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/favicon.ico" sizes="any">
+  <link rel="icon" href="images/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="images/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- 100% local — aucun appel à un CDN tiers (RGPD) -->
+  <link rel="preload" href="fonts/fraunces-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/public-sans-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="images/aura-gate-open-desktop.webp" as="image" type="image/webp">
+
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/domaine.css">
+</head>
+
+<body>
+
+  <!-- ==================================================================
+     MODALE +18 — Vérification d'âge / Loi Évin
+     ================================================================== -->
+  <div class="age-gate" id="age-gate" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+    <div class="age-gate__panel">
+      <div class="age-gate__mark" aria-hidden="true">A</div>
+      <h2 class="age-gate__title" id="age-gate-title">Bienvenue chez MAISON AURA</h2>
+      <p class="age-gate__lede">
+        Ce site présente des boissons alcoolisées. Merci de confirmer votre date de naissance pour poursuivre.
+      </p>
+
+      <form class="age-gate__form-wrap" id="age-gate-form" novalidate>
+        <div class="age-gate__form">
+          <label class="visually-hidden" for="age-day">Jour</label>
+          <input class="age-gate__field" type="number" id="age-day" placeholder="JJ" min="1" max="31"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-month">Mois</label>
+          <input class="age-gate__field" type="number" id="age-month" placeholder="MM" min="1" max="12"
+            inputmode="numeric" required>
+
+          <label class="visually-hidden" for="age-year">Année</label>
+          <input class="age-gate__field age-gate__field--year" type="number" id="age-year" placeholder="AAAA" min="1900"
+            max="2100" inputmode="numeric" required>
+        </div>
+
+        <p class="age-gate__error" role="alert"></p>
+
+        <div class="age-gate__actions">
+          <button type="submit" class="btn btn--fill">J'entre sur le site</button>
+          <button type="button" class="age-gate__decline">Je n'ai pas l'âge légal</button>
+        </div>
+      </form>
+
+      <p class="age-gate__legal">
+        L'abus d'alcool est dangereux pour la santé, à consommer avec modération.
+        Conformément à la loi Évin, la vente d'alcool est interdite aux mineurs.
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     BANNIÈRE COOKIES
+     ================================================================== -->
+  <div class="cookie-banner" id="cookie-banner" role="region" aria-label="Cookies">
+    <p class="cookie-banner__text">
+      Ce site n'utilise aucun cookie de suivi ni de publicité. Seules des données techniques
+      essentielles (vérification d'âge, contenu du panier) sont conservées localement dans votre
+      navigateur pour assurer son bon fonctionnement.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--decline">Refuser</button>
+      <button type="button" class="cookie-banner__btn cookie-banner__btn--accept">Accepter</button>
+    </div>
+  </div>
+
+  <!-- ==================================================================
+     HEADER
+     ================================================================== -->
+  <header class="site-header">
+    <a href="index.html" class="site-header__logo" aria-label="MAISON AURA — Accueil">
+      <picture>
+        <source srcset="images/logo-maison-aura.webp" type="image/webp">
+        <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+      </picture>
+    </a>
+
+    <nav class="site-header__nav" id="site-nav" aria-label="Navigation principale">
+      <a href="domaine.html">Le Domaine</a>
+      <a href="exception.html">Cuvée d'Exception</a>
+      <a href="cuvees.html">Les Cuvées</a>
+      <a href="boutique.html">Boutique</a>
+      <a href="experiences.html">Expériences</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+    <div class="site-header__actions">
+      <div class="site-header__lang">
+        <a href="domaine.html" class="is-active" aria-current="true">FR</a>
+        <span aria-hidden="true">/</span>
+        <a href="en/domaine.html">EN</a>
+      </div>
+      <a href="cart.html" class="site-header__cart" aria-label="Voir le panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 7h16l-1.4 10.6a2 2 0 0 1-2 1.7H7.4a2 2 0 0 1-2-1.7L4 7Z"></path>
+          <path d="M8 7V5.6a4 4 0 1 1 8 0V7"></path>
+        </svg>
+        <span class="site-header__cart-badge" id="cart-badge" hidden>0</span>
+      </a>
+      <button class="site-header__burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-nav">
+        <span class="site-header__burger-icon"><span></span><span></span><span></span></span>Menu
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu">
+
+    <!-- ==================================================================
+       HERO — Le portail grand ouvert sur le domaine
+       ================================================================== -->
+    <section class="domaine-hero" id="domaine-hero">
+      <div class="domaine-hero__media">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/aura-gate-open-mobile.webp" type="image/webp">
+          <source media="(max-width: 1024px)" srcset="images/aura-gate-open-tablet.webp" type="image/webp">
+          <source media="(min-width: 1025px)" srcset="images/aura-gate-open-desktop.webp" type="image/webp">
+          <img id="domaine-hero-image" src="images/aura-gate-open-desktop.jpg"
+            alt="Portail du domaine MAISON AURA grand ouvert, allée de lavande menant à la bastide provençale au milieu des vignes"
+            loading="eager" fetchpriority="high">
+        </picture>
+      </div>
+      <div class="domaine-hero__veil" aria-hidden="true"></div>
+
+      <div class="domaine-hero__content" id="domaine-hero-content">
+        <span class="eyebrow">Côtes de Provence</span>
+        <h1>Le Domaine</h1>
+        <p class="lede">
+          Niché entre mer et collines, un terroir que l'on ne presse jamais —
+          une bastide, des vignes, et le temps qu'il faut.
+        </p>
+      </div>
+
+      <div class="domaine-hero__scrollcue" aria-hidden="true">
+        <span></span>
+        Défiler
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       HISTOIRE — l'origine du domaine
+       ================================================================== -->
+    <section class="section section--flush-top" id="histoire">
+      <div class="wrap domaine-teaser">
+        <div class="domaine-teaser__media">
+          <picture>
+            <source media="(max-width: 768px)" srcset="images/aura-gate-closed-mobile.webp" type="image/webp">
+            <source media="(max-width: 1024px)" srcset="images/aura-gate-closed-tablet.webp" type="image/webp">
+            <source media="(min-width: 1025px)" srcset="images/aura-gate-closed-desktop.webp" type="image/webp">
+            <img src="images/aura-gate-closed-desktop.jpg"
+              alt="Portail en fer forgé du domaine MAISON AURA, blason au sunburst doré, vignes visibles à travers la grille au coucher du soleil"
+              loading="lazy">
+          </picture>
+        </div>
+        <div class="domaine-teaser__content">
+          <span class="eyebrow domaine-teaser__eyebrow">Depuis les origines</span>
+          <h2 class="domaine-teaser__title">Une même terre, jamais pressée.</h2>
+          <p class="lede domaine-teaser__text">
+            Le domaine s'étend sur les hauteurs du Golfe, là où la lumière décline lentement sur les rangs de vigne.
+            Rien n'a été bâti pour impressionner — la bastide, les chais, les allées de lavande existent depuis
+            plusieurs générations, entretenus avec la même exigence discrète.
+          </p>
+          <p class="lede domaine-teaser__text">
+            MAISON AURA ne cherche pas à produire davantage, mais à produire juste — trois cuvées, trois intensités
+            de lumière, portées par un seul terroir.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       LE TERROIR — plein écran, texte en surimpression, léger parallax
+       ================================================================== -->
+    <section class="domaine-feature" id="terroir">
+      <div class="domaine-feature__media">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/terroir-vignes-mobile.webp" type="image/webp">
+          <source media="(max-width: 1024px)" srcset="images/terroir-vignes-tablet.webp" type="image/webp">
+          <source media="(min-width: 1025px)" srcset="images/terroir-vignes-desktop.webp" type="image/webp">
+          <img id="terroir-image" src="images/terroir-vignes-desktop.jpg"
+            alt="Rangs de vigne du domaine surplombant la mer au coucher du soleil, pins parasols et oliviers en bord de littoral"
+            loading="lazy">
+        </picture>
+      </div>
+      <div class="domaine-feature__veil" aria-hidden="true"></div>
+      <div class="domaine-feature__content">
+        <span class="eyebrow">Le Terroir</span>
+        <h2>Un sol calcaire, une brise marine.</h2>
+        <p class="lede">
+          Argilo-calcaire en surface, drainant en profondeur — le sol du domaine impose ses propres limites.
+          La proximité de la mer tempère les étés, la garrigue environnante infuse une salinité discrète
+          que l'on retrouve, en filigrane, dans chacune des trois cuvées.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       L'ART DE LA VIGNE — philosophie de culture, grille de 3 visuels
+       ================================================================== -->
+    <section class="section" id="vigne">
+      <div class="wrap" data-reveal>
+        <span class="eyebrow">Le Savoir-Faire</span>
+        <h2 style="margin-top:1rem; margin-bottom:1.6rem;">L'art de la vigne, sans précipitation.</h2>
+        <p class="lede" style="margin-bottom:3rem;">
+          Vendanges manuelles, rendements volontairement limités, vinification parcelle par parcelle —
+          chaque geste du domaine répond à une seule question : que ferait-on si l'on n'était pas pressé ?
+        </p>
+      </div>
+
+      <div class="wrap domaine-grid">
+        <figure class="domaine-grid__item">
+          <picture>
+            <source media="(max-width: 768px)" srcset="images/vigne-grappe-mobile.webp" type="image/webp">
+            <source media="(max-width: 1024px)" srcset="images/vigne-grappe-tablet.webp" type="image/webp">
+            <source media="(min-width: 1025px)" srcset="images/vigne-grappe-desktop.webp" type="image/webp">
+            <img src="images/vigne-grappe-desktop.jpg"
+              alt="Grappe de raisin mûr sur la vigne du domaine, baignée de lumière dorée" loading="lazy">
+          </picture>
+          <figcaption>Vendanges manuelles, à la main, parcelle par parcelle.</figcaption>
+        </figure>
+        <figure class="domaine-grid__item">
+          <picture>
+            <source media="(max-width: 768px)" srcset="images/vigne-rangs-mobile.webp" type="image/webp">
+            <source media="(max-width: 1024px)" srcset="images/vigne-rangs-tablet.webp" type="image/webp">
+            <source media="(min-width: 1025px)" srcset="images/vigne-rangs-desktop.webp" type="image/webp">
+            <img src="images/vigne-rangs-desktop.jpg"
+              alt="Rangs de vigne du domaine menant à la bastide provençale au coucher du soleil, mer en arrière-plan"
+              loading="lazy">
+          </picture>
+          <figcaption>Rendements volontairement limités, pour une concentration juste.</figcaption>
+        </figure>
+        <figure class="domaine-grid__item">
+          <picture>
+            <source media="(max-width: 768px)" srcset="images/vigne-chai-mobile.webp" type="image/webp">
+            <source media="(max-width: 1024px)" srcset="images/vigne-chai-tablet.webp" type="image/webp">
+            <source media="(min-width: 1025px)" srcset="images/vigne-chai-desktop.webp" type="image/webp">
+            <img src="images/vigne-chai-desktop.jpg"
+              alt="Chai voûté du domaine MAISON AURA, fûts de chêne alignés sous éclairage tamisé" loading="lazy">
+          </picture>
+          <figcaption>Élevage patient, en chai voûté, à température constante.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       LA BASTIDE — architecture et lieu de vie du domaine
+       ================================================================== -->
+    <section class="section" id="bastide">
+      <div class="wrap domaine-teaser domaine-teaser--reverse">
+        <div class="domaine-teaser__media">
+          <picture>
+            <source media="(max-width: 768px)" srcset="images/aura-gate-arrival-mobile.webp" type="image/webp">
+            <source media="(max-width: 1024px)" srcset="images/aura-gate-arrival-tablet.webp" type="image/webp">
+            <source media="(min-width: 1025px)" srcset="images/aura-gate-arrival-desktop.webp" type="image/webp">
+            <img src="images/aura-gate-arrival-desktop.jpg"
+              alt="Allée de gravier bordée de lavande menant à la bastide provençale du domaine MAISON AURA au coucher du soleil"
+              loading="lazy">
+          </picture>
+        </div>
+        <div class="domaine-teaser__content">
+          <span class="eyebrow domaine-teaser__eyebrow">La Bastide</span>
+          <h2 class="domaine-teaser__title">Une maison, pas une vitrine.</h2>
+          <p class="lede domaine-teaser__text">
+            Entourée de cyprès et de lavande, la bastide reste avant tout un lieu de travail — celui des
+            vendanges, des assemblages, des repas partagés après la cueillette. Ses portes s'ouvrent,
+            sur rendez-vous, à ceux qui souhaitent la découvrir autrement qu'en photo.
+          </p>
+          <a href="experiences.html" class="btn btn--ghost">Réserver une visite</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+       CTA — vers les cuvées
+       ================================================================== -->
+    <section class="section domaine-cta" id="domaine-cta">
+      <div class="wrap" id="domaine-cta-reveal">
+        <span class="eyebrow">Le Fruit de ce Terroir</span>
+        <h2>Trois cuvées, une même lumière.</h2>
+        <p class="lede" style="margin-inline:auto;">
+          Plaisir, Gastronomie, Exception — chacune porte, à sa manière, l'exigence du domaine.
+        </p>
+        <a href="cuvees.html" class="btn btn--fill">Découvrir les cuvées</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================================================================
+     FOOTER
+     ================================================================== -->
+  <footer class="site-footer" id="contact">
+    <div class="wrap site-footer__grid">
+      <div>
+        <picture class="site-footer__brand">
+          <source srcset="images/logo-maison-aura.webp" type="image/webp">
+          <img src="images/logo-maison-aura.png" alt="MAISON AURA — Vins de Provence" width="900" height="974">
+        </picture>
+        <p class="lede" style="margin-top:1rem; font-size:.85rem;">Domaine Viticole — Côtes de Provence.</p>
+      </div>
+      <div class="site-footer__col">
+        <h4>Maison</h4>
+        <a href="domaine.html">Le Domaine</a>
+        <a href="exception.html">Cuvée d'Exception</a>
+        <a href="cuvees.html">Les Cuvées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Contact</h4>
+        <a href="mailto:contact@maisonaura.fr">contact@maisonaura.fr</a>
+        <a href="experiences.html">Expériences privées</a>
+      </div>
+      <div class="site-footer__col">
+        <h4>Suivre</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Pinterest</a>
+      </div>
+    </div>
+    <div class="wrap site-footer__legal">
+      <span>© <span id="footer-year"></span> MAISON AURA — L'abus d'alcool est dangereux pour la santé, à consommer avec
+        modération.</span>
+      <span>Mentions légales · CGV · Confidentialité · Cookies</span>
+    </div>
+  </footer>
+
+  <!-- ==================================================================
+     SCRIPTS — 100% locaux (RGPD)
+     ================================================================== -->
+  <script src="gsap/gsap.min.js"></script>
+  <script src="gsap/ScrollTrigger.min.js"></script>
+
+  <script src="js/global.js"></script>
+  <script type="module" src="js/domaine.js"></script>
+
+  <script>
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>
